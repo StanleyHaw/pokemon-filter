@@ -314,7 +314,8 @@ export function PokemonRow({ pokemon, onClick, moveFilter = [] }: Props) {
           loading="lazy"
           onError={(e) => {
             const img = e.currentTarget;
-            if (img.src !== window.location.origin + fallbackUrl) {
+            const fallbackAbsolute = new URL(fallbackUrl, window.location.href).href;
+            if (img.src !== fallbackAbsolute) {
               img.src = fallbackUrl;
             } else {
               img.style.display = 'none';
