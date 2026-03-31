@@ -1,0 +1,18 @@
+export const MOVE_TARGET_LABELS: Record<string, string> = {
+  "specific-move": "特定招式",
+  "selected-pokemon-me-first": "搶先對手",
+  "ally": "任一同伴",
+  "users-field": "我方場地",
+  "user-or-ally": "自身或同伴",
+  "opponents-field": "對手場地",
+  "user": "自身",
+  "random-opponent": "隨機對手",
+  "all-other-pokemon": "除自身外全場",
+  "selected-pokemon": "單體選擇",
+  "all-opponents": "對手全場",
+  "entire-field": "全部場地",
+  "user-and-allies": "自身和同伴",
+  "all-pokemon": "全部寶可夢",
+  "all-allies": "我方全體（除自身）",
+  "fainting-pokemon": "瀕死狀態",
+};

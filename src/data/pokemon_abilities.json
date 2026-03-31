@@ -1,0 +1,2179 @@
+[
+  {
+    "id": 1,
+    "zh_tw": "恶臭",
+    "zh_cn": "恶臭",
+    "ja": "あくしゅう",
+    "en": "Stench"
+  },
+  {
+    "id": 2,
+    "zh_tw": "降雨",
+    "zh_cn": "降雨",
+    "ja": "あめふらし",
+    "en": "Drizzle"
+  },
+  {
+    "id": 3,
+    "zh_tw": "加速",
+    "zh_cn": "加速",
+    "ja": "かそく",
+    "en": "Speed Boost"
+  },
+  {
+    "id": 4,
+    "zh_tw": "战斗盔甲",
+    "zh_cn": "战斗盔甲",
+    "ja": "カブトアーマー",
+    "en": "Battle Armor"
+  },
+  {
+    "id": 5,
+    "zh_tw": "结实",
+    "zh_cn": "结实",
+    "ja": "がんじょう",
+    "en": "Sturdy"
+  },
+  {
+    "id": 6,
+    "zh_tw": "湿气",
+    "zh_cn": "湿气",
+    "ja": "しめりけ",
+    "en": "Damp"
+  },
+  {
+    "id": 7,
+    "zh_tw": "柔软",
+    "zh_cn": "柔软",
+    "ja": "じゅうなん",
+    "en": "Limber"
+  },
+  {
+    "id": 8,
+    "zh_tw": "沙隐",
+    "zh_cn": "沙隐",
+    "ja": "すながくれ",
+    "en": "Sand Veil"
+  },
+  {
+    "id": 9,
+    "zh_tw": "静电",
+    "zh_cn": "静电",
+    "ja": "せいでんき",
+    "en": "Static"
+  },
+  {
+    "id": 10,
+    "zh_tw": "蓄电",
+    "zh_cn": "蓄电",
+    "ja": "ちくでん",
+    "en": "Volt Absorb"
+  },
+  {
+    "id": 11,
+    "zh_tw": "储水",
+    "zh_cn": "储水",
+    "ja": "ちょすい",
+    "en": "Water Absorb"
+  },
+  {
+    "id": 12,
+    "zh_tw": "迟钝",
+    "zh_cn": "迟钝",
+    "ja": "どんかん",
+    "en": "Oblivious"
+  },
+  {
+    "id": 13,
+    "zh_tw": "无关天气",
+    "zh_cn": "无关天气",
+    "ja": "ノーてんき",
+    "en": "Cloud Nine"
+  },
+  {
+    "id": 14,
+    "zh_tw": "复眼",
+    "zh_cn": "复眼",
+    "ja": "ふくがん",
+    "en": "Compound Eyes"
+  },
+  {
+    "id": 15,
+    "zh_tw": "不眠",
+    "zh_cn": "不眠",
+    "ja": "ふみん",
+    "en": "Insomnia"
+  },
+  {
+    "id": 16,
+    "zh_tw": "变色",
+    "zh_cn": "变色",
+    "ja": "へんしょく",
+    "en": "Color Change"
+  },
+  {
+    "id": 17,
+    "zh_tw": "免疫",
+    "zh_cn": "免疫",
+    "ja": "めんえき",
+    "en": "Immunity"
+  },
+  {
+    "id": 18,
+    "zh_tw": "引火",
+    "zh_cn": "引火",
+    "ja": "もらいび",
+    "en": "Flash Fire"
+  },
+  {
+    "id": 19,
+    "zh_tw": "鳞粉",
+    "zh_cn": "鳞粉",
+    "ja": "りんぷん",
+    "en": "Shield Dust"
+  },
+  {
+    "id": 20,
+    "zh_tw": "我行我素",
+    "zh_cn": "我行我素",
+    "ja": "マイペース",
+    "en": "Own Tempo"
+  },
+  {
+    "id": 21,
+    "zh_tw": "吸盘",
+    "zh_cn": "吸盘",
+    "ja": "きゅうばん",
+    "en": "Suction Cups"
+  },
+  {
+    "id": 22,
+    "zh_tw": "威吓",
+    "zh_cn": "威吓",
+    "ja": "いかく",
+    "en": "Intimidate"
+  },
+  {
+    "id": 23,
+    "zh_tw": "踩影",
+    "zh_cn": "踩影",
+    "ja": "かげふみ",
+    "en": "Shadow Tag"
+  },
+  {
+    "id": 24,
+    "zh_tw": "粗糙皮肤",
+    "zh_cn": "粗糙皮肤",
+    "ja": "さめはだ",
+    "en": "Rough Skin"
+  },
+  {
+    "id": 25,
+    "zh_tw": "神奇守护",
+    "zh_cn": "神奇守护",
+    "ja": "ふしぎなまもり",
+    "en": "Wonder Guard"
+  },
+  {
+    "id": 26,
+    "zh_tw": "飘浮",
+    "zh_cn": "飘浮",
+    "ja": "ふゆう",
+    "en": "Levitate"
+  },
+  {
+    "id": 27,
+    "zh_tw": "孢子",
+    "zh_cn": "孢子",
+    "ja": "ほうし",
+    "en": "Effect Spore"
+  },
+  {
+    "id": 28,
+    "zh_tw": "同步",
+    "zh_cn": "同步",
+    "ja": "シンクロ",
+    "en": "Synchronize"
+  },
+  {
+    "id": 29,
+    "zh_tw": "恒净之躯",
+    "zh_cn": "恒净之躯",
+    "ja": "クリアボディ",
+    "en": "Clear Body"
+  },
+  {
+    "id": 30,
+    "zh_tw": "自然回复",
+    "zh_cn": "自然回复",
+    "ja": "しぜんかいふく",
+    "en": "Natural Cure"
+  },
+  {
+    "id": 31,
+    "zh_tw": "避雷针",
+    "zh_cn": "避雷针",
+    "ja": "ひらいしん",
+    "en": "Lightning Rod"
+  },
+  {
+    "id": 32,
+    "zh_tw": "天恩",
+    "zh_cn": "天恩",
+    "ja": "てんのめぐみ",
+    "en": "Serene Grace"
+  },
+  {
+    "id": 33,
+    "zh_tw": "悠游自如",
+    "zh_cn": "悠游自如",
+    "ja": "すいすい",
+    "en": "Swift Swim"
+  },
+  {
+    "id": 34,
+    "zh_tw": "叶绿素",
+    "zh_cn": "叶绿素",
+    "ja": "ようりょくそ",
+    "en": "Chlorophyll"
+  },
+  {
+    "id": 35,
+    "zh_tw": "发光",
+    "zh_cn": "发光",
+    "ja": "はっこう",
+    "en": "Illuminate"
+  },
+  {
+    "id": 36,
+    "zh_tw": "复制",
+    "zh_cn": "复制",
+    "ja": "トレース",
+    "en": "Trace"
+  },
+  {
+    "id": 37,
+    "zh_tw": "大力士",
+    "zh_cn": "大力士",
+    "ja": "ちからもち",
+    "en": "Huge Power"
+  },
+  {
+    "id": 38,
+    "zh_tw": "毒刺",
+    "zh_cn": "毒刺",
+    "ja": "どくのトゲ",
+    "en": "Poison Point"
+  },
+  {
+    "id": 39,
+    "zh_tw": "精神力",
+    "zh_cn": "精神力",
+    "ja": "せいしんりょく",
+    "en": "Inner Focus"
+  },
+  {
+    "id": 40,
+    "zh_tw": "熔岩铠甲",
+    "zh_cn": "熔岩铠甲",
+    "ja": "マグマのよろい",
+    "en": "Magma Armor"
+  },
+  {
+    "id": 41,
+    "zh_tw": "水幕",
+    "zh_cn": "水幕",
+    "ja": "みずのベール",
+    "en": "Water Veil"
+  },
+  {
+    "id": 42,
+    "zh_tw": "磁力",
+    "zh_cn": "磁力",
+    "ja": "じりょく",
+    "en": "Magnet Pull"
+  },
+  {
+    "id": 43,
+    "zh_tw": "隔音",
+    "zh_cn": "隔音",
+    "ja": "ぼうおん",
+    "en": "Soundproof"
+  },
+  {
+    "id": 44,
+    "zh_tw": "雨盘",
+    "zh_cn": "雨盘",
+    "ja": "あめうけざら",
+    "en": "Rain Dish"
+  },
+  {
+    "id": 45,
+    "zh_tw": "扬沙",
+    "zh_cn": "扬沙",
+    "ja": "すなおこし",
+    "en": "Sand Stream"
+  },
+  {
+    "id": 46,
+    "zh_tw": "压迫感",
+    "zh_cn": "压迫感",
+    "ja": "プレッシャー",
+    "en": "Pressure"
+  },
+  {
+    "id": 47,
+    "zh_tw": "厚脂肪",
+    "zh_cn": "厚脂肪",
+    "ja": "あついしぼう",
+    "en": "Thick Fat"
+  },
+  {
+    "id": 48,
+    "zh_tw": "早起",
+    "zh_cn": "早起",
+    "ja": "はやおき",
+    "en": "Early Bird"
+  },
+  {
+    "id": 49,
+    "zh_tw": "火焰之躯",
+    "zh_cn": "火焰之躯",
+    "ja": "ほのおのからだ",
+    "en": "Flame Body"
+  },
+  {
+    "id": 50,
+    "zh_tw": "逃跑",
+    "zh_cn": "逃跑",
+    "ja": "にげあし",
+    "en": "Run Away"
+  },
+  {
+    "id": 51,
+    "zh_tw": "锐利目光",
+    "zh_cn": "锐利目光",
+    "ja": "するどいめ",
+    "en": "Keen Eye"
+  },
+  {
+    "id": 52,
+    "zh_tw": "怪力钳",
+    "zh_cn": "怪力钳",
+    "ja": "かいりきバサミ",
+    "en": "Hyper Cutter"
+  },
+  {
+    "id": 53,
+    "zh_tw": "捡拾",
+    "zh_cn": "捡拾",
+    "ja": "ものひろい",
+    "en": "Pickup"
+  },
+  {
+    "id": 54,
+    "zh_tw": "懒惰",
+    "zh_cn": "懒惰",
+    "ja": "なまけ",
+    "en": "Truant"
+  },
+  {
+    "id": 55,
+    "zh_tw": "活力",
+    "zh_cn": "活力",
+    "ja": "はりきり",
+    "en": "Hustle"
+  },
+  {
+    "id": 56,
+    "zh_tw": "迷人之躯",
+    "zh_cn": "迷人之躯",
+    "ja": "メロメロボディ",
+    "en": "Cute Charm"
+  },
+  {
+    "id": 57,
+    "zh_tw": "正电",
+    "zh_cn": "正电",
+    "ja": "プラス",
+    "en": "Plus"
+  },
+  {
+    "id": 58,
+    "zh_tw": "负电",
+    "zh_cn": "负电",
+    "ja": "マイナス",
+    "en": "Minus"
+  },
+  {
+    "id": 59,
+    "zh_tw": "阴晴不定",
+    "zh_cn": "阴晴不定",
+    "ja": "てんきや",
+    "en": "Forecast"
+  },
+  {
+    "id": 60,
+    "zh_tw": "黏着",
+    "zh_cn": "黏着",
+    "ja": "ねんちゃく",
+    "en": "Sticky Hold"
+  },
+  {
+    "id": 61,
+    "zh_tw": "蜕皮",
+    "zh_cn": "蜕皮",
+    "ja": "だっぴ",
+    "en": "Shed Skin"
+  },
+  {
+    "id": 62,
+    "zh_tw": "毅力",
+    "zh_cn": "毅力",
+    "ja": "こんじょう",
+    "en": "Guts"
+  },
+  {
+    "id": 63,
+    "zh_tw": "神奇鳞片",
+    "zh_cn": "神奇鳞片",
+    "ja": "ふしぎなうろこ",
+    "en": "Marvel Scale"
+  },
+  {
+    "id": 64,
+    "zh_tw": "污泥浆",
+    "zh_cn": "污泥浆",
+    "ja": "ヘドロえき",
+    "en": "Liquid Ooze"
+  },
+  {
+    "id": 65,
+    "zh_tw": "茂盛",
+    "zh_cn": "茂盛",
+    "ja": "しんりょく",
+    "en": "Overgrow"
+  },
+  {
+    "id": 66,
+    "zh_tw": "猛火",
+    "zh_cn": "猛火",
+    "ja": "もうか",
+    "en": "Blaze"
+  },
+  {
+    "id": 67,
+    "zh_tw": "激流",
+    "zh_cn": "激流",
+    "ja": "げきりゅう",
+    "en": "Torrent"
+  },
+  {
+    "id": 68,
+    "zh_tw": "虫之预感",
+    "zh_cn": "虫之预感",
+    "ja": "むしのしらせ",
+    "en": "Swarm"
+  },
+  {
+    "id": 69,
+    "zh_tw": "坚硬脑袋",
+    "zh_cn": "坚硬脑袋",
+    "ja": "いしあたま",
+    "en": "Rock Head"
+  },
+  {
+    "id": 70,
+    "zh_tw": "日照",
+    "zh_cn": "日照",
+    "ja": "ひでり",
+    "en": "Drought"
+  },
+  {
+    "id": 71,
+    "zh_tw": "沙穴",
+    "zh_cn": "沙穴",
+    "ja": "ありじごく",
+    "en": "Arena Trap"
+  },
+  {
+    "id": 72,
+    "zh_tw": "干劲",
+    "zh_cn": "干劲",
+    "ja": "やるき",
+    "en": "Vital Spirit"
+  },
+  {
+    "id": 73,
+    "zh_tw": "白色烟雾",
+    "zh_cn": "白色烟雾",
+    "ja": "しろいけむり",
+    "en": "White Smoke"
+  },
+  {
+    "id": 74,
+    "zh_tw": "瑜伽之力",
+    "zh_cn": "瑜伽之力",
+    "ja": "ヨガパワー",
+    "en": "Pure Power"
+  },
+  {
+    "id": 75,
+    "zh_tw": "硬壳盔甲",
+    "zh_cn": "硬壳盔甲",
+    "ja": "シェルアーマー",
+    "en": "Shell Armor"
+  },
+  {
+    "id": 76,
+    "zh_tw": "*",
+    "zh_cn": "*",
+    "ja": "仅出现在第三世代}}",
+    "en": "杂音"
+  },
+  {
+    "id": 76,
+    "zh_tw": "*",
+    "zh_cn": "*",
+    "ja": "在第三世代编号为077}}",
+    "en": "气闸"
+  },
+  {
+    "id": 77,
+    "zh_tw": "蹒跚",
+    "zh_cn": "蹒跚",
+    "ja": "ちどりあし",
+    "en": "Tangled Feet"
+  },
+  {
+    "id": 78,
+    "zh_tw": "电气引擎",
+    "zh_cn": "电气引擎",
+    "ja": "でんきエンジン",
+    "en": "Motor Drive"
+  },
+  {
+    "id": 79,
+    "zh_tw": "斗争心",
+    "zh_cn": "斗争心",
+    "ja": "とうそうしん",
+    "en": "Rivalry"
+  },
+  {
+    "id": 80,
+    "zh_tw": "不屈之心",
+    "zh_cn": "不屈之心",
+    "ja": "ふくつのこころ",
+    "en": "Steadfast"
+  },
+  {
+    "id": 81,
+    "zh_tw": "雪隐",
+    "zh_cn": "雪隐",
+    "ja": "ゆきがくれ",
+    "en": "Snow Cloak"
+  },
+  {
+    "id": 82,
+    "zh_tw": "贪吃鬼",
+    "zh_cn": "贪吃鬼",
+    "ja": "くいしんぼう",
+    "en": "Gluttony"
+  },
+  {
+    "id": 83,
+    "zh_tw": "愤怒穴位",
+    "zh_cn": "愤怒穴位",
+    "ja": "いかりのつぼ",
+    "en": "Anger Point"
+  },
+  {
+    "id": 84,
+    "zh_tw": "轻装",
+    "zh_cn": "轻装",
+    "ja": "かるわざ",
+    "en": "Unburden"
+  },
+  {
+    "id": 85,
+    "zh_tw": "耐热",
+    "zh_cn": "耐热",
+    "ja": "たいねつ",
+    "en": "Heatproof"
+  },
+  {
+    "id": 86,
+    "zh_tw": "单纯",
+    "zh_cn": "单纯",
+    "ja": "たんじゅん",
+    "en": "Simple"
+  },
+  {
+    "id": 87,
+    "zh_tw": "干燥皮肤",
+    "zh_cn": "干燥皮肤",
+    "ja": "かんそうはだ",
+    "en": "Dry Skin"
+  },
+  {
+    "id": 88,
+    "zh_tw": "下载",
+    "zh_cn": "下载",
+    "ja": "ダウンロード",
+    "en": "Download"
+  },
+  {
+    "id": 89,
+    "zh_tw": "铁拳",
+    "zh_cn": "铁拳",
+    "ja": "てつのこぶし",
+    "en": "Iron Fist"
+  },
+  {
+    "id": 90,
+    "zh_tw": "毒疗",
+    "zh_cn": "毒疗",
+    "ja": "ポイズンヒール",
+    "en": "Poison Heal"
+  },
+  {
+    "id": 91,
+    "zh_tw": "适应力",
+    "zh_cn": "适应力",
+    "ja": "てきおうりょく",
+    "en": "Adaptability"
+  },
+  {
+    "id": 92,
+    "zh_tw": "连续攻击",
+    "zh_cn": "连续攻击",
+    "ja": "スキルリンク",
+    "en": "Skill Link"
+  },
+  {
+    "id": 93,
+    "zh_tw": "湿润之躯",
+    "zh_cn": "湿润之躯",
+    "ja": "うるおいボディ",
+    "en": "Hydration"
+  },
+  {
+    "id": 94,
+    "zh_tw": "太阳之力",
+    "zh_cn": "太阳之力",
+    "ja": "サンパワー",
+    "en": "Solar Power"
+  },
+  {
+    "id": 95,
+    "zh_tw": "飞毛腿",
+    "zh_cn": "飞毛腿",
+    "ja": "はやあし",
+    "en": "Quick Feet"
+  },
+  {
+    "id": 96,
+    "zh_tw": "一般皮肤",
+    "zh_cn": "一般皮肤",
+    "ja": "ノーマルスキン",
+    "en": "Normalize"
+  },
+  {
+    "id": 97,
+    "zh_tw": "狙击手",
+    "zh_cn": "狙击手",
+    "ja": "スナイパー",
+    "en": "Sniper"
+  },
+  {
+    "id": 98,
+    "zh_tw": "魔法防守",
+    "zh_cn": "魔法防守",
+    "ja": "マジックガード",
+    "en": "Magic Guard"
+  },
+  {
+    "id": 99,
+    "zh_tw": "无防守",
+    "zh_cn": "无防守",
+    "ja": "ノーガード",
+    "en": "No Guard"
+  },
+  {
+    "id": 100,
+    "zh_tw": "慢出",
+    "zh_cn": "慢出",
+    "ja": "あとだし",
+    "en": "Stall"
+  },
+  {
+    "id": 101,
+    "zh_tw": "技术高手",
+    "zh_cn": "技术高手",
+    "ja": "テクニシャン",
+    "en": "Technician"
+  },
+  {
+    "id": 102,
+    "zh_tw": "叶子防守",
+    "zh_cn": "叶子防守",
+    "ja": "リーフガード",
+    "en": "Leaf Guard"
+  },
+  {
+    "id": 103,
+    "zh_tw": "笨拙",
+    "zh_cn": "笨拙",
+    "ja": "ぶきよう",
+    "en": "Klutz"
+  },
+  {
+    "id": 104,
+    "zh_tw": "破格",
+    "zh_cn": "破格",
+    "ja": "かたやぶり",
+    "en": "Mold Breaker"
+  },
+  {
+    "id": 105,
+    "zh_tw": "超幸运",
+    "zh_cn": "超幸运",
+    "ja": "きょううん",
+    "en": "Super Luck"
+  },
+  {
+    "id": 106,
+    "zh_tw": "引爆",
+    "zh_cn": "引爆",
+    "ja": "ゆうばく",
+    "en": "Aftermath"
+  },
+  {
+    "id": 107,
+    "zh_tw": "危险预知",
+    "zh_cn": "危险预知",
+    "ja": "きけんよち",
+    "en": "Anticipation"
+  },
+  {
+    "id": 108,
+    "zh_tw": "预知梦",
+    "zh_cn": "预知梦",
+    "ja": "よちむ",
+    "en": "Forewarn"
+  },
+  {
+    "id": 109,
+    "zh_tw": "纯朴",
+    "zh_cn": "纯朴",
+    "ja": "てんねん",
+    "en": "Unaware"
+  },
+  {
+    "id": 110,
+    "zh_tw": "有色眼镜",
+    "zh_cn": "有色眼镜",
+    "ja": "いろめがね",
+    "en": "Tinted Lens"
+  },
+  {
+    "id": 111,
+    "zh_tw": "过滤",
+    "zh_cn": "过滤",
+    "ja": "フィルター",
+    "en": "Filter"
+  },
+  {
+    "id": 112,
+    "zh_tw": "慢启动",
+    "zh_cn": "慢启动",
+    "ja": "スロースタート",
+    "en": "Slow Start"
+  },
+  {
+    "id": 113,
+    "zh_tw": "胆量",
+    "zh_cn": "胆量",
+    "ja": "きもったま",
+    "en": "Scrappy"
+  },
+  {
+    "id": 114,
+    "zh_tw": "引水",
+    "zh_cn": "引水",
+    "ja": "よびみず",
+    "en": "Storm Drain"
+  },
+  {
+    "id": 115,
+    "zh_tw": "冰冻之躯",
+    "zh_cn": "冰冻之躯",
+    "ja": "アイスボディ",
+    "en": "Ice Body"
+  },
+  {
+    "id": 116,
+    "zh_tw": "坚硬岩石",
+    "zh_cn": "坚硬岩石",
+    "ja": "ハードロック",
+    "en": "Solid Rock"
+  },
+  {
+    "id": 117,
+    "zh_tw": "降雪",
+    "zh_cn": "降雪",
+    "ja": "ゆきふらし",
+    "en": "Snow Warning"
+  },
+  {
+    "id": 118,
+    "zh_tw": "采蜜",
+    "zh_cn": "采蜜",
+    "ja": "みつあつめ",
+    "en": "Honey Gather"
+  },
+  {
+    "id": 119,
+    "zh_tw": "察觉",
+    "zh_cn": "察觉",
+    "ja": "おみとおし",
+    "en": "Frisk"
+  },
+  {
+    "id": 120,
+    "zh_tw": "舍身",
+    "zh_cn": "舍身",
+    "ja": "すてみ",
+    "en": "Reckless"
+  },
+  {
+    "id": 121,
+    "zh_tw": "多属性",
+    "zh_cn": "多属性",
+    "ja": "マルチタイプ",
+    "en": "Multitype"
+  },
+  {
+    "id": 122,
+    "zh_tw": "花之礼",
+    "zh_cn": "花之礼",
+    "ja": "フラワーギフト",
+    "en": "Flower Gift"
+  },
+  {
+    "id": 123,
+    "zh_tw": "梦魇",
+    "zh_cn": "梦魇",
+    "ja": "ナイトメア",
+    "en": "Bad Dreams"
+  },
+  {
+    "id": 124,
+    "zh_tw": "顺手牵羊",
+    "zh_cn": "顺手牵羊",
+    "ja": "わるいてぐせ",
+    "en": "Pickpocket"
+  },
+  {
+    "id": 125,
+    "zh_tw": "强行",
+    "zh_cn": "强行",
+    "ja": "ちからずく",
+    "en": "Sheer Force"
+  },
+  {
+    "id": 126,
+    "zh_tw": "唱反调",
+    "zh_cn": "唱反调",
+    "ja": "あまのじゃく",
+    "en": "Contrary"
+  },
+  {
+    "id": 127,
+    "zh_tw": "紧张感",
+    "zh_cn": "紧张感",
+    "ja": "きんちょうかん",
+    "en": "Unnerve"
+  },
+  {
+    "id": 128,
+    "zh_tw": "不服输",
+    "zh_cn": "不服输",
+    "ja": "まけんき",
+    "en": "Defiant"
+  },
+  {
+    "id": 129,
+    "zh_tw": "软弱",
+    "zh_cn": "软弱",
+    "ja": "よわき",
+    "en": "Defeatist"
+  },
+  {
+    "id": 130,
+    "zh_tw": "诅咒之躯",
+    "zh_cn": "诅咒之躯",
+    "ja": "のろわれボディ",
+    "en": "Cursed Body"
+  },
+  {
+    "id": 131,
+    "zh_tw": "治愈之心",
+    "zh_cn": "治愈之心",
+    "ja": "いやしのこころ",
+    "en": "Healer"
+  },
+  {
+    "id": 132,
+    "zh_tw": "友情防守",
+    "zh_cn": "友情防守",
+    "ja": "フレンドガード",
+    "en": "Friend Guard"
+  },
+  {
+    "id": 133,
+    "zh_tw": "碎裂铠甲",
+    "zh_cn": "碎裂铠甲",
+    "ja": "くだけるよろい",
+    "en": "Weak Armor"
+  },
+  {
+    "id": 134,
+    "zh_tw": "重金属",
+    "zh_cn": "重金属",
+    "ja": "ヘヴィメタル",
+    "en": "Heavy Metal"
+  },
+  {
+    "id": 135,
+    "zh_tw": "轻金属",
+    "zh_cn": "轻金属",
+    "ja": "ライトメタル",
+    "en": "Light Metal"
+  },
+  {
+    "id": 136,
+    "zh_tw": "多重鳞片",
+    "zh_cn": "多重鳞片",
+    "ja": "マルチスケイル",
+    "en": "Multiscale"
+  },
+  {
+    "id": 137,
+    "zh_tw": "中毒激升",
+    "zh_cn": "中毒激升",
+    "ja": "どくぼうそう",
+    "en": "Toxic Boost"
+  },
+  {
+    "id": 138,
+    "zh_tw": "受热激升",
+    "zh_cn": "受热激升",
+    "ja": "ねつぼうそう",
+    "en": "Flare Boost"
+  },
+  {
+    "id": 139,
+    "zh_tw": "收获",
+    "zh_cn": "收获",
+    "ja": "しゅうかく",
+    "en": "Harvest"
+  },
+  {
+    "id": 140,
+    "zh_tw": "心灵感应",
+    "zh_cn": "心灵感应",
+    "ja": "テレパシー",
+    "en": "Telepathy"
+  },
+  {
+    "id": 141,
+    "zh_tw": "心情不定",
+    "zh_cn": "心情不定",
+    "ja": "ムラっけ",
+    "en": "Moody"
+  },
+  {
+    "id": 142,
+    "zh_tw": "防尘",
+    "zh_cn": "防尘",
+    "ja": "ぼうじん",
+    "en": "Overcoat"
+  },
+  {
+    "id": 143,
+    "zh_tw": "毒手",
+    "zh_cn": "毒手",
+    "ja": "どくしゅ",
+    "en": "Poison Touch"
+  },
+  {
+    "id": 144,
+    "zh_tw": "再生力",
+    "zh_cn": "再生力",
+    "ja": "さいせいりょく",
+    "en": "Regenerator"
+  },
+  {
+    "id": 145,
+    "zh_tw": "健壮胸肌",
+    "zh_cn": "健壮胸肌",
+    "ja": "はとむね",
+    "en": "Big Pecks"
+  },
+  {
+    "id": 146,
+    "zh_tw": "拨沙",
+    "zh_cn": "拨沙",
+    "ja": "すなかき",
+    "en": "Sand Rush"
+  },
+  {
+    "id": 147,
+    "zh_tw": "奇迹皮肤",
+    "zh_cn": "奇迹皮肤",
+    "ja": "ミラクルスキン",
+    "en": "Wonder Skin"
+  },
+  {
+    "id": 148,
+    "zh_tw": "分析",
+    "zh_cn": "分析",
+    "ja": "アナライズ",
+    "en": "Analytic"
+  },
+  {
+    "id": 149,
+    "zh_tw": "幻觉",
+    "zh_cn": "幻觉",
+    "ja": "イリュージョン",
+    "en": "Illusion"
+  },
+  {
+    "id": 150,
+    "zh_tw": "变身者",
+    "zh_cn": "变身者",
+    "ja": "かわりもの",
+    "en": "Imposter"
+  },
+  {
+    "id": 151,
+    "zh_tw": "穿透",
+    "zh_cn": "穿透",
+    "ja": "すりぬけ",
+    "en": "Infiltrator"
+  },
+  {
+    "id": 152,
+    "zh_tw": "木乃伊",
+    "zh_cn": "木乃伊",
+    "ja": "ミイラ",
+    "en": "Mummy"
+  },
+  {
+    "id": 153,
+    "zh_tw": "自信过度",
+    "zh_cn": "自信过度",
+    "ja": "じしんかじょう",
+    "en": "Moxie"
+  },
+  {
+    "id": 154,
+    "zh_tw": "正义之心",
+    "zh_cn": "正义之心",
+    "ja": "せいぎのこころ",
+    "en": "Justified"
+  },
+  {
+    "id": 155,
+    "zh_tw": "胆怯",
+    "zh_cn": "胆怯",
+    "ja": "びびり",
+    "en": "Rattled"
+  },
+  {
+    "id": 156,
+    "zh_tw": "魔法镜",
+    "zh_cn": "魔法镜",
+    "ja": "マジックミラー",
+    "en": "Magic Bounce"
+  },
+  {
+    "id": 157,
+    "zh_tw": "食草",
+    "zh_cn": "食草",
+    "ja": "そうしょく",
+    "en": "Sap Sipper"
+  },
+  {
+    "id": 158,
+    "zh_tw": "恶作剧之心",
+    "zh_cn": "恶作剧之心",
+    "ja": "いたずらごころ",
+    "en": "Prankster"
+  },
+  {
+    "id": 159,
+    "zh_tw": "沙之力",
+    "zh_cn": "沙之力",
+    "ja": "すなのちから",
+    "en": "Sand Force"
+  },
+  {
+    "id": 160,
+    "zh_tw": "铁刺",
+    "zh_cn": "铁刺",
+    "ja": "てつのトゲ",
+    "en": "Iron Barbs"
+  },
+  {
+    "id": 161,
+    "zh_tw": "达摩模式",
+    "zh_cn": "达摩模式",
+    "ja": "ダルマモード",
+    "en": "Zen Mode"
+  },
+  {
+    "id": 162,
+    "zh_tw": "胜利之星",
+    "zh_cn": "胜利之星",
+    "ja": "しょうりのほし",
+    "en": "Victory Star"
+  },
+  {
+    "id": 163,
+    "zh_tw": "涡轮火焰",
+    "zh_cn": "涡轮火焰",
+    "ja": "ターボブレイズ",
+    "en": "Turboblaze"
+  },
+  {
+    "id": 164,
+    "zh_tw": "兆级电压",
+    "zh_cn": "兆级电压",
+    "ja": "テラボルテージ",
+    "en": "Teravolt"
+  },
+  {
+    "id": 165,
+    "zh_tw": "芳香幕",
+    "zh_cn": "芳香幕",
+    "ja": "アロマベール",
+    "en": "Aroma Veil"
+  },
+  {
+    "id": 166,
+    "zh_tw": "花幕",
+    "zh_cn": "花幕",
+    "ja": "フラワーベール",
+    "en": "Flower Veil"
+  },
+  {
+    "id": 167,
+    "zh_tw": "颊囊",
+    "zh_cn": "颊囊",
+    "ja": "ほおぶくろ",
+    "en": "Cheek Pouch"
+  },
+  {
+    "id": 168,
+    "zh_tw": "变幻自如",
+    "zh_cn": "变幻自如",
+    "ja": "へんげんじざい",
+    "en": "Protean"
+  },
+  {
+    "id": 169,
+    "zh_tw": "毛皮大衣",
+    "zh_cn": "毛皮大衣",
+    "ja": "ファーコート",
+    "en": "Fur Coat"
+  },
+  {
+    "id": 170,
+    "zh_tw": "魔术师",
+    "zh_cn": "魔术师",
+    "ja": "マジシャン",
+    "en": "Magician"
+  },
+  {
+    "id": 171,
+    "zh_tw": "防弹",
+    "zh_cn": "防弹",
+    "ja": "ぼうだん",
+    "en": "Bulletproof"
+  },
+  {
+    "id": 172,
+    "zh_tw": "好胜",
+    "zh_cn": "好胜",
+    "ja": "かちき",
+    "en": "Competitive"
+  },
+  {
+    "id": 173,
+    "zh_tw": "强壮之颚",
+    "zh_cn": "强壮之颚",
+    "ja": "がんじょうあご",
+    "en": "Strong Jaw"
+  },
+  {
+    "id": 174,
+    "zh_tw": "冰冻皮肤",
+    "zh_cn": "冰冻皮肤",
+    "ja": "フリーズスキン",
+    "en": "Refrigerate"
+  },
+  {
+    "id": 175,
+    "zh_tw": "甜幕",
+    "zh_cn": "甜幕",
+    "ja": "スイートベール",
+    "en": "Sweet Veil"
+  },
+  {
+    "id": 176,
+    "zh_tw": "战斗切换",
+    "zh_cn": "战斗切换",
+    "ja": "バトルスイッチ",
+    "en": "Stance Change"
+  },
+  {
+    "id": 177,
+    "zh_tw": "疾风之翼",
+    "zh_cn": "疾风之翼",
+    "ja": "はやてのつばさ",
+    "en": "Gale Wings"
+  },
+  {
+    "id": 178,
+    "zh_tw": "超级发射器",
+    "zh_cn": "超级发射器",
+    "ja": "メガランチャー",
+    "en": "Mega Launcher"
+  },
+  {
+    "id": 179,
+    "zh_tw": "草之毛皮",
+    "zh_cn": "草之毛皮",
+    "ja": "くさのけがわ",
+    "en": "Grass Pelt"
+  },
+  {
+    "id": 180,
+    "zh_tw": "共生",
+    "zh_cn": "共生",
+    "ja": "きょうせい",
+    "en": "Symbiosis"
+  },
+  {
+    "id": 181,
+    "zh_tw": "硬爪",
+    "zh_cn": "硬爪",
+    "ja": "かたいツメ",
+    "en": "Tough Claws"
+  },
+  {
+    "id": 182,
+    "zh_tw": "妖精皮肤",
+    "zh_cn": "妖精皮肤",
+    "ja": "フェアリースキン",
+    "en": "Pixilate"
+  },
+  {
+    "id": 183,
+    "zh_tw": "黏滑",
+    "zh_cn": "黏滑",
+    "ja": "ぬめぬめ",
+    "en": "Gooey"
+  },
+  {
+    "id": 184,
+    "zh_tw": "飞行皮肤",
+    "zh_cn": "飞行皮肤",
+    "ja": "スカイスキン",
+    "en": "Aerilate"
+  },
+  {
+    "id": 185,
+    "zh_tw": "亲子爱",
+    "zh_cn": "亲子爱",
+    "ja": "おやこあい",
+    "en": "Parental Bond"
+  },
+  {
+    "id": 186,
+    "zh_tw": "暗黑气场",
+    "zh_cn": "暗黑气场",
+    "ja": "ダークオーラ",
+    "en": "Dark Aura"
+  },
+  {
+    "id": 187,
+    "zh_tw": "妖精气场",
+    "zh_cn": "妖精气场",
+    "ja": "フェアリーオーラ",
+    "en": "Fairy Aura"
+  },
+  {
+    "id": 188,
+    "zh_tw": "气场破坏",
+    "zh_cn": "气场破坏",
+    "ja": "オーラブレイク",
+    "en": "Aura Break"
+  },
+  {
+    "id": 189,
+    "zh_tw": "始源之海",
+    "zh_cn": "始源之海",
+    "ja": "はじまりのうみ",
+    "en": "Primordial Sea"
+  },
+  {
+    "id": 190,
+    "zh_tw": "终结之地",
+    "zh_cn": "终结之地",
+    "ja": "おわりのだいち",
+    "en": "Desolate Land"
+  },
+  {
+    "id": 191,
+    "zh_tw": "德尔塔气流",
+    "zh_cn": "德尔塔气流",
+    "ja": "デルタストリーム",
+    "en": "Delta Stream"
+  },
+  {
+    "id": 192,
+    "zh_tw": "持久力",
+    "zh_cn": "持久力",
+    "ja": "じきゅうりょく",
+    "en": "Stamina"
+  },
+  {
+    "id": 193,
+    "zh_tw": "跃跃欲逃",
+    "zh_cn": "跃跃欲逃",
+    "ja": "にげごし",
+    "en": "Wimp Out"
+  },
+  {
+    "id": 194,
+    "zh_tw": "危险回避",
+    "zh_cn": "危险回避",
+    "ja": "ききかいひ",
+    "en": "Emergency Exit"
+  },
+  {
+    "id": 195,
+    "zh_tw": "遇水凝固",
+    "zh_cn": "遇水凝固",
+    "ja": "みずがため",
+    "en": "Water Compaction"
+  },
+  {
+    "id": 196,
+    "zh_tw": "不仁不义",
+    "zh_cn": "不仁不义",
+    "ja": "ひとでなし",
+    "en": "Merciless"
+  },
+  {
+    "id": 197,
+    "zh_tw": "界限盾壳",
+    "zh_cn": "界限盾壳",
+    "ja": "リミットシールド",
+    "en": "Shields Down"
+  },
+  {
+    "id": 198,
+    "zh_tw": "蹲守",
+    "zh_cn": "蹲守",
+    "ja": "はりこみ",
+    "en": "Stakeout"
+  },
+  {
+    "id": 199,
+    "zh_tw": "水泡",
+    "zh_cn": "水泡",
+    "ja": "すいほう",
+    "en": "Water Bubble"
+  },
+  {
+    "id": 200,
+    "zh_tw": "钢能力者",
+    "zh_cn": "钢能力者",
+    "ja": "はがねつかい",
+    "en": "Steelworker"
+  },
+  {
+    "id": 201,
+    "zh_tw": "怒火冲天",
+    "zh_cn": "怒火冲天",
+    "ja": "ぎゃくじょう",
+    "en": "Berserk"
+  },
+  {
+    "id": 202,
+    "zh_tw": "拨雪",
+    "zh_cn": "拨雪",
+    "ja": "ゆきかき",
+    "en": "Slush Rush"
+  },
+  {
+    "id": 203,
+    "zh_tw": "远隔",
+    "zh_cn": "远隔",
+    "ja": "えんかく",
+    "en": "Long Reach"
+  },
+  {
+    "id": 204,
+    "zh_tw": "湿润之声",
+    "zh_cn": "湿润之声",
+    "ja": "うるおいボイス",
+    "en": "Liquid Voice"
+  },
+  {
+    "id": 205,
+    "zh_tw": "先行治疗",
+    "zh_cn": "先行治疗",
+    "ja": "ヒーリングシフト",
+    "en": "Triage"
+  },
+  {
+    "id": 206,
+    "zh_tw": "电气皮肤",
+    "zh_cn": "电气皮肤",
+    "ja": "エレキスキン",
+    "en": "Galvanize"
+  },
+  {
+    "id": 207,
+    "zh_tw": "冲浪之尾",
+    "zh_cn": "冲浪之尾",
+    "ja": "サーフテール",
+    "en": "Surge Surfer"
+  },
+  {
+    "id": 208,
+    "zh_tw": "鱼群",
+    "zh_cn": "鱼群",
+    "ja": "ぎょぐん",
+    "en": "Schooling"
+  },
+  {
+    "id": 209,
+    "zh_tw": "画皮",
+    "zh_cn": "画皮",
+    "ja": "ばけのかわ",
+    "en": "Disguise"
+  },
+  {
+    "id": 210,
+    "zh_tw": "牵绊变身",
+    "zh_cn": "牵绊变身",
+    "ja": "きずなへんげ",
+    "en": "Battle Bond"
+  },
+  {
+    "id": 211,
+    "zh_tw": "群聚变形",
+    "zh_cn": "群聚变形",
+    "ja": "スワームチェンジ",
+    "en": "Power Construct"
+  },
+  {
+    "id": 212,
+    "zh_tw": "腐蚀",
+    "zh_cn": "腐蚀",
+    "ja": "ふしょく",
+    "en": "Corrosion"
+  },
+  {
+    "id": 213,
+    "zh_tw": "绝对睡眠",
+    "zh_cn": "绝对睡眠",
+    "ja": "ぜったいねむり",
+    "en": "Comatose"
+  },
+  {
+    "id": 214,
+    "zh_tw": "女王的威严",
+    "zh_cn": "女王的威严",
+    "ja": "じょおうのいげん",
+    "en": "Queenly Majesty"
+  },
+  {
+    "id": 215,
+    "zh_tw": "飞出的内在物",
+    "zh_cn": "飞出的内在物",
+    "ja": "とびだすなかみ",
+    "en": "Innards Out"
+  },
+  {
+    "id": 216,
+    "zh_tw": "舞者",
+    "zh_cn": "舞者",
+    "ja": "おどりこ",
+    "en": "Dancer"
+  },
+  {
+    "id": 217,
+    "zh_tw": "蓄电池",
+    "zh_cn": "蓄电池",
+    "ja": "バッテリー",
+    "en": "Battery"
+  },
+  {
+    "id": 218,
+    "zh_tw": "毛茸茸",
+    "zh_cn": "毛茸茸",
+    "ja": "もふもふ",
+    "en": "Fluffy"
+  },
+  {
+    "id": 219,
+    "zh_tw": "鲜艳之躯",
+    "zh_cn": "鲜艳之躯",
+    "ja": "ビビッドボディ",
+    "en": "Dazzling"
+  },
+  {
+    "id": 220,
+    "zh_tw": "魂心",
+    "zh_cn": "魂心",
+    "ja": "ソウルハート",
+    "en": "Soul-Heart"
+  },
+  {
+    "id": 221,
+    "zh_tw": "卷发",
+    "zh_cn": "卷发",
+    "ja": "カーリーヘアー",
+    "en": "Tangling Hair"
+  },
+  {
+    "id": 222,
+    "zh_tw": "接球手",
+    "zh_cn": "接球手",
+    "ja": "レシーバー",
+    "en": "Receiver"
+  },
+  {
+    "id": 223,
+    "zh_tw": "化学之力",
+    "zh_cn": "化学之力",
+    "ja": "かがくのちから",
+    "en": "Power of Alchemy"
+  },
+  {
+    "id": 224,
+    "zh_tw": "异兽提升",
+    "zh_cn": "异兽提升",
+    "ja": "ビーストブースト",
+    "en": "Beast Boost"
+  },
+  {
+    "id": 225,
+    "zh_tw": "ＡＲ系统",
+    "zh_cn": "ＡＲ系统",
+    "ja": "ＡＲシステム",
+    "en": "RKS System"
+  },
+  {
+    "id": 226,
+    "zh_tw": "电气制造者",
+    "zh_cn": "电气制造者",
+    "ja": "エレキメイカー",
+    "en": "Electric Surge"
+  },
+  {
+    "id": 227,
+    "zh_tw": "精神制造者",
+    "zh_cn": "精神制造者",
+    "ja": "サイコメイカー",
+    "en": "Psychic Surge"
+  },
+  {
+    "id": 228,
+    "zh_tw": "薄雾制造者",
+    "zh_cn": "薄雾制造者",
+    "ja": "ミストメイカー",
+    "en": "Misty Surge"
+  },
+  {
+    "id": 229,
+    "zh_tw": "青草制造者",
+    "zh_cn": "青草制造者",
+    "ja": "グラスメイカー",
+    "en": "Grassy Surge"
+  },
+  {
+    "id": 230,
+    "zh_tw": "金属防护",
+    "zh_cn": "金属防护",
+    "ja": "メタルプロテクト",
+    "en": "Full Metal Body"
+  },
+  {
+    "id": 231,
+    "zh_tw": "幻影防守",
+    "zh_cn": "幻影防守",
+    "ja": "ファントムガード",
+    "en": "Shadow Shield"
+  },
+  {
+    "id": 232,
+    "zh_tw": "棱镜装甲",
+    "zh_cn": "棱镜装甲",
+    "ja": "プリズムアーマー",
+    "en": "Prism Armor"
+  },
+  {
+    "id": 233,
+    "zh_tw": "脑核之力",
+    "zh_cn": "脑核之力",
+    "ja": "ブレインフォース",
+    "en": "Neuroforce"
+  },
+  {
+    "id": 234,
+    "zh_tw": "不挠之剑",
+    "zh_cn": "不挠之剑",
+    "ja": "ふとうのけん",
+    "en": "Intrepid Sword"
+  },
+  {
+    "id": 235,
+    "zh_tw": "不屈之盾",
+    "zh_cn": "不屈之盾",
+    "ja": "ふくつのたて",
+    "en": "Dauntless Shield"
+  },
+  {
+    "id": 236,
+    "zh_tw": "自由者",
+    "zh_cn": "自由者",
+    "ja": "リベロ",
+    "en": "Libero"
+  },
+  {
+    "id": 237,
+    "zh_tw": "捡球",
+    "zh_cn": "捡球",
+    "ja": "たまひろい",
+    "en": "Ball Fetch"
+  },
+  {
+    "id": 238,
+    "zh_tw": "棉絮",
+    "zh_cn": "棉絮",
+    "ja": "わたげ",
+    "en": "Cotton Down"
+  },
+  {
+    "id": 239,
+    "zh_tw": "螺旋尾鳍",
+    "zh_cn": "螺旋尾鳍",
+    "ja": "スクリューおびれ",
+    "en": "Propeller Tail"
+  },
+  {
+    "id": 240,
+    "zh_tw": "镜甲",
+    "zh_cn": "镜甲",
+    "ja": "ミラーアーマー",
+    "en": "Mirror Armor"
+  },
+  {
+    "id": 241,
+    "zh_tw": "一口导弹",
+    "zh_cn": "一口导弹",
+    "ja": "うのミサイル",
+    "en": "Gulp Missile"
+  },
+  {
+    "id": 242,
+    "zh_tw": "坚毅",
+    "zh_cn": "坚毅",
+    "ja": "すじがねいり",
+    "en": "Stalwart"
+  },
+  {
+    "id": 243,
+    "zh_tw": "蒸汽机",
+    "zh_cn": "蒸汽机",
+    "ja": "じょうききかん",
+    "en": "Steam Engine"
+  },
+  {
+    "id": 244,
+    "zh_tw": "庞克摇滚",
+    "zh_cn": "庞克摇滚",
+    "ja": "パンクロック",
+    "en": "Punk Rock"
+  },
+  {
+    "id": 245,
+    "zh_tw": "吐沙",
+    "zh_cn": "吐沙",
+    "ja": "すなはき",
+    "en": "Sand Spit"
+  },
+  {
+    "id": 246,
+    "zh_tw": "冰鳞粉",
+    "zh_cn": "冰鳞粉",
+    "ja": "こおりのりんぷん",
+    "en": "Ice Scales"
+  },
+  {
+    "id": 247,
+    "zh_tw": "熟成",
+    "zh_cn": "熟成",
+    "ja": "じゅくせい",
+    "en": "Ripen"
+  },
+  {
+    "id": 248,
+    "zh_tw": "结冻头",
+    "zh_cn": "结冻头",
+    "ja": "アイスフェイス",
+    "en": "Ice Face"
+  },
+  {
+    "id": 249,
+    "zh_tw": "能量点",
+    "zh_cn": "能量点",
+    "ja": "パワースポット",
+    "en": "Power Spot"
+  },
+  {
+    "id": 250,
+    "zh_tw": "拟态",
+    "zh_cn": "拟态",
+    "ja": "ぎたい",
+    "en": "Mimicry"
+  },
+  {
+    "id": 251,
+    "zh_tw": "除障",
+    "zh_cn": "除障",
+    "ja": "バリアフリー",
+    "en": "Screen Cleaner"
+  },
+  {
+    "id": 252,
+    "zh_tw": "钢之意志",
+    "zh_cn": "钢之意志",
+    "ja": "はがねのせいしん",
+    "en": "Steely Spirit"
+  },
+  {
+    "id": 253,
+    "zh_tw": "灭亡之躯",
+    "zh_cn": "灭亡之躯",
+    "ja": "ほろびのボディ",
+    "en": "Perish Body"
+  },
+  {
+    "id": 254,
+    "zh_tw": "游魂",
+    "zh_cn": "游魂",
+    "ja": "さまようたましい",
+    "en": "Wandering Spirit"
+  },
+  {
+    "id": 255,
+    "zh_tw": "一猩一意",
+    "zh_cn": "一猩一意",
+    "ja": "ごりむちゅう",
+    "en": "Gorilla Tactics"
+  },
+  {
+    "id": 256,
+    "zh_tw": "化学变化气体",
+    "zh_cn": "化学变化气体",
+    "ja": "かがくへんかガス",
+    "en": "Neutralizing Gas"
+  },
+  {
+    "id": 257,
+    "zh_tw": "粉彩护幕",
+    "zh_cn": "粉彩护幕",
+    "ja": "パステルベール",
+    "en": "Pastel Veil"
+  },
+  {
+    "id": 258,
+    "zh_tw": "饱了又饿",
+    "zh_cn": "饱了又饿",
+    "ja": "はらぺこスイッチ",
+    "en": "Hunger Switch"
+  },
+  {
+    "id": 259,
+    "zh_tw": "速击",
+    "zh_cn": "速击",
+    "ja": "クイックドロウ",
+    "en": "Quick Draw"
+  },
+  {
+    "id": 260,
+    "zh_tw": "无形拳",
+    "zh_cn": "无形拳",
+    "ja": "ふかしのこぶし",
+    "en": "Unseen Fist"
+  },
+  {
+    "id": 261,
+    "zh_tw": "怪药",
+    "zh_cn": "怪药",
+    "ja": "きみょうなくすり",
+    "en": "Curious Medicine"
+  },
+  {
+    "id": 262,
+    "zh_tw": "电晶体",
+    "zh_cn": "电晶体",
+    "ja": "トランジスタ",
+    "en": "Transistor"
+  },
+  {
+    "id": 263,
+    "zh_tw": "龙颚",
+    "zh_cn": "龙颚",
+    "ja": "りゅうのあぎと",
+    "en": "Dragon's Maw"
+  },
+  {
+    "id": 264,
+    "zh_tw": "苍白嘶鸣",
+    "zh_cn": "苍白嘶鸣",
+    "ja": "しろのいななき",
+    "en": "Chilling Neigh"
+  },
+  {
+    "id": 265,
+    "zh_tw": "漆黑嘶鸣",
+    "zh_cn": "漆黑嘶鸣",
+    "ja": "くろのいななき",
+    "en": "Grim Neigh"
+  },
+  {
+    "id": 266,
+    "zh_tw": "人马一体",
+    "zh_cn": "人马一体",
+    "ja": "じんばいったい",
+    "en": "As One"
+  },
+  {
+    "id": 267,
+    "zh_tw": "人马一体",
+    "zh_cn": "人马一体",
+    "ja": "じんばいったい",
+    "en": "As One"
+  },
+  {
+    "id": 268,
+    "zh_tw": "甩不掉的气味",
+    "zh_cn": "甩不掉的气味",
+    "ja": "とれないにおい",
+    "en": "Lingering Aroma"
+  },
+  {
+    "id": 269,
+    "zh_tw": "掉出种子",
+    "zh_cn": "掉出种子",
+    "ja": "こぼれダネ",
+    "en": "Seed Sower"
+  },
+  {
+    "id": 270,
+    "zh_tw": "热交换",
+    "zh_cn": "热交换",
+    "ja": "ねつこうかん",
+    "en": "Thermal Exchange"
+  },
+  {
+    "id": 271,
+    "zh_tw": "愤怒甲壳",
+    "zh_cn": "愤怒甲壳",
+    "ja": "いかりのこうら",
+    "en": "Anger Shell"
+  },
+  {
+    "id": 272,
+    "zh_tw": "洁净之盐",
+    "zh_cn": "洁净之盐",
+    "ja": "きよめのしお",
+    "en": "Purifying Salt"
+  },
+  {
+    "id": 273,
+    "zh_tw": "焦香之躯",
+    "zh_cn": "焦香之躯",
+    "ja": "こんがりボディ",
+    "en": "Well-Baked Body"
+  },
+  {
+    "id": 274,
+    "zh_tw": "乘风",
+    "zh_cn": "乘风",
+    "ja": "かぜのり",
+    "en": "Wind Rider"
+  },
+  {
+    "id": 275,
+    "zh_tw": "看门犬",
+    "zh_cn": "看门犬",
+    "ja": "ばんけん",
+    "en": "Guard Dog"
+  },
+  {
+    "id": 276,
+    "zh_tw": "搬岩",
+    "zh_cn": "搬岩",
+    "ja": "いわはこび",
+    "en": "Rocky Payload"
+  },
+  {
+    "id": 277,
+    "zh_tw": "风力发电",
+    "zh_cn": "风力发电",
+    "ja": "ふうりょくでんき",
+    "en": "Wind Power"
+  },
+  {
+    "id": 278,
+    "zh_tw": "全能变身",
+    "zh_cn": "全能变身",
+    "ja": "マイティチェンジ",
+    "en": "Zero to Hero"
+  },
+  {
+    "id": 279,
+    "zh_tw": "发号施令",
+    "zh_cn": "发号施令",
+    "ja": "しれいとう",
+    "en": "Commander"
+  },
+  {
+    "id": 280,
+    "zh_tw": "电力转换",
+    "zh_cn": "电力转换",
+    "ja": "でんきにかえる",
+    "en": "Electromorphosis"
+  },
+  {
+    "id": 281,
+    "zh_tw": "古代活性",
+    "zh_cn": "古代活性",
+    "ja": "こだいかっせい",
+    "en": "Protosynthesis"
+  },
+  {
+    "id": 282,
+    "zh_tw": "夸克充能",
+    "zh_cn": "夸克充能",
+    "ja": "クォークチャージ",
+    "en": "Quark Drive"
+  },
+  {
+    "id": 283,
+    "zh_tw": "黄金之躯",
+    "zh_cn": "黄金之躯",
+    "ja": "おうごんのからだ",
+    "en": "Good as Gold"
+  },
+  {
+    "id": 284,
+    "zh_tw": "灾祸之鼎",
+    "zh_cn": "灾祸之鼎",
+    "ja": "わざわいのうつわ",
+    "en": "Vessel of Ruin"
+  },
+  {
+    "id": 285,
+    "zh_tw": "灾祸之剑",
+    "zh_cn": "灾祸之剑",
+    "ja": "わざわいのつるぎ",
+    "en": "Sword of Ruin"
+  },
+  {
+    "id": 286,
+    "zh_tw": "灾祸之简",
+    "zh_cn": "灾祸之简",
+    "ja": "わざわいのおふだ",
+    "en": "Tablets of Ruin"
+  },
+  {
+    "id": 287,
+    "zh_tw": "灾祸之玉",
+    "zh_cn": "灾祸之玉",
+    "ja": "わざわいのたま",
+    "en": "Beads of Ruin"
+  },
+  {
+    "id": 288,
+    "zh_tw": "绯红脉动",
+    "zh_cn": "绯红脉动",
+    "ja": "ひひいろのこどう",
+    "en": "Orichalcum Pulse"
+  },
+  {
+    "id": 289,
+    "zh_tw": "强子引擎",
+    "zh_cn": "强子引擎",
+    "ja": "ハドロンエンジン",
+    "en": "Hadron Engine"
+  },
+  {
+    "id": 290,
+    "zh_tw": "跟风",
+    "zh_cn": "跟风",
+    "ja": "びんじょう",
+    "en": "Opportunist"
+  },
+  {
+    "id": 291,
+    "zh_tw": "反刍",
+    "zh_cn": "反刍",
+    "ja": "はんすう",
+    "en": "Cud Chew"
+  },
+  {
+    "id": 292,
+    "zh_tw": "锋锐",
+    "zh_cn": "锋锐",
+    "ja": "きれあじ",
+    "en": "Sharpness"
+  },
+  {
+    "id": 293,
+    "zh_tw": "大将",
+    "zh_cn": "大将",
+    "ja": "そうだいしょう",
+    "en": "Supreme Overlord"
+  },
+  {
+    "id": 294,
+    "zh_tw": "同台共演",
+    "zh_cn": "同台共演",
+    "ja": "きょうえん",
+    "en": "Costar"
+  },
+  {
+    "id": 295,
+    "zh_tw": "毒满地",
+    "zh_cn": "毒满地",
+    "ja": "どくげしょう",
+    "en": "Toxic Debris"
+  },
+  {
+    "id": 296,
+    "zh_tw": "尾甲",
+    "zh_cn": "尾甲",
+    "ja": "テイルアーマー",
+    "en": "Armor Tail"
+  },
+  {
+    "id": 297,
+    "zh_tw": "食土",
+    "zh_cn": "食土",
+    "ja": "どしょく",
+    "en": "Earth Eater"
+  },
+  {
+    "id": 298,
+    "zh_tw": "菌丝之力",
+    "zh_cn": "菌丝之力",
+    "ja": "きんしのちから",
+    "en": "Mycelium Might"
+  },
+  {
+    "id": 299,
+    "zh_tw": "款待",
+    "zh_cn": "款待",
+    "ja": "おもてなし",
+    "en": "Hospitality"
+  },
+  {
+    "id": 300,
+    "zh_tw": "心眼",
+    "zh_cn": "心眼",
+    "ja": "しんがん",
+    "en": "Mind's Eye"
+  },
+  {
+    "id": 301,
+    "zh_tw": "面影辉映",
+    "zh_cn": "面影辉映",
+    "ja": "おもかげやどし",
+    "en": "Embody Aspect"
+  },
+  {
+    "id": 302,
+    "zh_tw": "面影辉映",
+    "zh_cn": "面影辉映",
+    "ja": "おもかげやどし",
+    "en": "Embody Aspect"
+  },
+  {
+    "id": 303,
+    "zh_tw": "面影辉映",
+    "zh_cn": "面影辉映",
+    "ja": "おもかげやどし",
+    "en": "Embody Aspect"
+  },
+  {
+    "id": 304,
+    "zh_tw": "面影辉映",
+    "zh_cn": "面影辉映",
+    "ja": "おもかげやどし",
+    "en": "Embody Aspect"
+  },
+  {
+    "id": 305,
+    "zh_tw": "毒锁链",
+    "zh_cn": "毒锁链",
+    "ja": "どくのくさり",
+    "en": "Toxic Chain"
+  },
+  {
+    "id": 306,
+    "zh_tw": "甘露之蜜",
+    "zh_cn": "甘露之蜜",
+    "ja": "かんろなミツ",
+    "en": "Supersweet Syrup"
+  },
+  {
+    "id": 307,
+    "zh_tw": "太晶变形",
+    "zh_cn": "太晶变形",
+    "ja": "テラスチェンジ",
+    "en": "Tera Shift"
+  },
+  {
+    "id": 308,
+    "zh_tw": "太晶甲壳",
+    "zh_cn": "太晶甲壳",
+    "ja": "テラスシェル",
+    "en": "Tera Shell"
+  },
+  {
+    "id": 309,
+    "zh_tw": "归零化境",
+    "zh_cn": "归零化境",
+    "ja": "ゼロフォーミング",
+    "en": "Teraform Zero"
+  },
+  {
+    "id": 310,
+    "zh_tw": "毒傀儡",
+    "zh_cn": "毒傀儡",
+    "ja": "どくくぐつ",
+    "en": "Poison Puppeteer"
+  }
+]
