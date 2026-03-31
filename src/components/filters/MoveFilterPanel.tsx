@@ -52,9 +52,9 @@ export function MoveFilterPanel() {
         <button
           onClick={resetPanel}
           title="重置此欄位篩選"
-          className="absolute top-1.5 right-1.5 w-4 h-4 flex items-center justify-center text-[10px] text-gray-500 hover:text-white hover:bg-surface-hover rounded transition-colors leading-none"
+          className="absolute top-1.5 right-1.5 text-[10px] px-1.5 py-0.5 rounded border border-red-600/60 text-red-400 hover:bg-red-600/20 transition-colors leading-none"
         >
-          ×
+          重置
         </button>
       )}
 
