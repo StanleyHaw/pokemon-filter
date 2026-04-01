@@ -6,11 +6,12 @@ import { TypeBadge } from '../pokemon/TypeBadge';
 import { DAMAGE_CLASS_LABELS, MOVE_CATEGORY_LABELS } from '../../constants/moves';
 import { MOVE_TARGET_LABELS } from '../../constants/moveTargets';
 import { ALL_TYPES } from '../../constants/types';
+import { MOVE_GROUPS, getMoveGroupIds } from '../../constants/moveGroups';
 
 type OpenSection = null | 'type' | 'target' | 'category';
 
 export function MoveFilterPanel() {
-  const { filterState, setFilter, toggleMoveFilter } = usePokemonStore();
+  const { filterState, setFilter, toggleMoveFilter, toggleMoveTagFilter, toggleMoveGroupFilter } = usePokemonStore();
 
   const [query, setQuery] = useState('');
   const [damageClass, setDamageClass] = useState('');
@@ -269,6 +270,60 @@ export function MoveFilterPanel() {
             <Slider.Thumb className="block w-3 h-3 rounded-full border-2 outline-none cursor-pointer bg-accent-blue border-accent-blue" />
             <Slider.Thumb className="block w-3 h-3 rounded-full border-2 outline-none cursor-pointer bg-accent-blue border-accent-blue" />
           </Slider.Root>
+        </div>
+      </div>
+
+      {/* Move tag filter */}
+      <div>
+        <div className="text-[11px] text-gray-500 mb-1">招式特性篩選</div>
+        <div className="flex flex-wrap gap-1">
+          {([
+            { tag: "isContactMove",  label: "接觸技" },
+            { tag: "isSoundMove",    label: "聲音技" },
+            { tag: "isHighPriority", label: "先制技" },
+            { tag: "isPunchMove",    label: "拳技" },
+            { tag: "isBiteMove",     label: "咬技" },
+            { tag: "isSlicingMove",  label: "斬擊技" },
+          ] as const).map(({ tag, label }) => {
+            const active = filterState.moveTagFilter.includes(tag);
+            return (
+              <button
+                key={tag}
+                onClick={() => toggleMoveTagFilter(tag)}
+                className={`text-[11px] px-1.5 py-1 rounded border transition-colors ${
+                  active
+                    ? "border-accent-blue text-accent-blue bg-accent-blue/10"
+                    : "border-surface-border text-gray-400 hover:border-gray-500"
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Move group filter */}
+      <div>
+        <div className="text-[11px] text-gray-500 mb-1">戰術群組篩選</div>
+        <div className="flex flex-wrap gap-1">
+          {getMoveGroupIds().map((groupId) => {
+            const active = filterState.moveGroupFilter.includes(groupId);
+            return (
+              <button
+                key={groupId}
+                onClick={() => toggleMoveGroupFilter(groupId)}
+                title={MOVE_GROUPS[groupId].description}
+                className={`text-[11px] px-1.5 py-1 rounded border transition-colors ${
+                  active
+                    ? "border-orange-500 text-orange-300 bg-orange-900/20"
+                    : "border-surface-border text-gray-400 hover:border-gray-500"
+                }`}
+              >
+                {MOVE_GROUPS[groupId].label}
+              </button>
+            );
+          })}
         </div>
       </div>
 

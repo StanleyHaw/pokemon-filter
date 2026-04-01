@@ -5,11 +5,17 @@ import { getAvatarUrl, getAvatarFallbackUrl } from '../../utils/avatar';
 import { getAbilityNameTw } from '../../constants/abilityNames';
 import { getPokemonNameTw, applyFormPrefix } from '../../utils/pokemonNames';
 import { RESTRICTED_LEGENDARY_IDS } from '../../constants/restrictedLegendaries';
+import { useShowdownStore } from '../../stores/useShowdownStore';
+import { getDisplayableMatchedMoves } from '../../lib/showdown/normalizeLearnset';
+import { toShowdownId, resolveLearnsetId } from '../../lib/showdown/showdownId';
+import { getMatchedMovesByConditions } from '../../lib/showdown/queryMoveGroups';
+import { type MoveGroupId, MOVE_GROUPS } from '../../constants/moveGroups';
 
 interface Props {
   pokemon: PokemonSummary;
   onClick: (p: PokemonSummary) => void;
   moveFilter?: MoveDetail[];
+  moveGroupFilter?: MoveGroupId[];
 }
 
 /** Full-width type badge for table cells */
@@ -275,12 +281,43 @@ function AbilityCellBadge({ name }: { name: string | null }) {
 const tdCenter = 'px-2 py-1.5 text-center text-xs text-white align-middle';
 const tdBorder = 'border-l border-surface-border';
 
-export function PokemonRow({ pokemon, onClick, moveFilter = [] }: Props) {
+export function PokemonRow({ pokemon, onClick, moveFilter = [], moveGroupFilter = [] }: Props) {
   const s = pokemon.stats;
   const avatarUrl = getAvatarUrl(pokemon.name);
   const fallbackUrl = getAvatarFallbackUrl(pokemon.name);
   const nameTw = applyFormPrefix(pokemon.name, getPokemonNameTw(pokemon.speciesId) || pokemon.nameTw);
   const isRestricted = RESTRICTED_LEGENDARY_IDS.has(pokemon.speciesId);
+
+  const { learnsetIndex, speciesLearnsetMap, species: showdownSpecies } = useShowdownStore();
+
+  // 計算本次篩選條件中，此 Pokémon 實際成立的招式（含進化鏈繼承）
+  const speciesIdForDisplay = learnsetIndex
+    ? (speciesLearnsetMap.get(toShowdownId(pokemon.name)) ??
+       resolveLearnsetId(pokemon.name, learnsetIndex.bySpecies))
+    : toShowdownId(pokemon.name);
+
+  // group 模式：使用 getMatchedMovesByConditions 取得命中明細
+  const groupMatchResult = learnsetIndex && moveGroupFilter.length > 0
+    ? getMatchedMovesByConditions(
+        speciesIdForDisplay,
+        {
+          anyOfGroups: moveGroupFilter,
+          allOfMoves: moveFilter.map((m) => toShowdownId(m.name)),
+        },
+        learnsetIndex,
+        showdownSpecies
+      )
+    : null;
+
+  // pure direct-move 模式：沿用原有 getDisplayableMatchedMoves
+  const matchedMoves = !groupMatchResult && learnsetIndex && moveFilter.length > 0
+    ? getDisplayableMatchedMoves(
+        learnsetIndex,
+        speciesIdForDisplay,
+        moveFilter.map((m) => toShowdownId(m.name)),
+        showdownSpecies
+      )
+    : null;
 
   // Form label with ability-based overrides
   let formLabel = getFormLabel(pokemon.name);
@@ -416,23 +453,76 @@ export function PokemonRow({ pokemon, onClick, moveFilter = [] }: Props) {
       <td className={`${tdCenter} text-gray-400 ${tdBorder}`}>{(pokemon.weight / 10).toFixed(1)}</td>
       <td className={`${tdCenter} text-gray-400`}>{(pokemon.height / 10).toFixed(1)}</td>
 
-      {/* 可學習的招式（僅在有招式篩選時顯示） */}
-      {moveFilter.length > 0 && (
+      {/* 可學習的招式（僅在有招式或群組篩選時顯示） */}
+      {(moveFilter.length > 0 || moveGroupFilter.length > 0) && (
         <td className={`px-2 py-1 align-middle ${tdBorder}`}>
           <div className="flex flex-wrap gap-1">
-            {moveFilter.map((move) => {
-              const canLearn = move.learnedByPokemon.some(
-                (lp) => lp.id === pokemon.id || lp.name === pokemon.name
-              );
-              return canLearn ? (
-                <span
-                  key={move.name}
-                  className="inline-block text-[10px] px-1.5 py-0.5 rounded bg-accent-blue/20 text-blue-300 border border-accent-blue/30 whitespace-nowrap"
-                >
-                  {move.nameTw}
-                </span>
-              ) : null;
-            })}
+            {groupMatchResult ? (
+              <>
+                {/* group 命中招式：橘色（排除已出現在 direct 清單中的同招，避免重複 chip） */}
+                {(() => {
+                  const directSet = new Set(groupMatchResult.matchedDirectMoves);
+                  return moveGroupFilter.flatMap((groupId) =>
+                    (groupMatchResult.matchedGroupMoves[groupId] ?? [])
+                      .filter((moveId) => !directSet.has(moveId))
+                      .map((moveId) => (
+                        <span
+                          key={`group-${groupId}-${moveId}`}
+                          title={MOVE_GROUPS[groupId].label}
+                          className="inline-block text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap bg-orange-900/30 text-orange-300 border-orange-500/40"
+                        >
+                          {moveId}
+                        </span>
+                      ))
+                  );
+                })()}
+                {/* direct 命中招式：藍色 */}
+                {groupMatchResult.matchedDirectMoves.map((moveId) => {
+                  const move = moveFilter.find((m) => toShowdownId(m.name) === moveId);
+                  return (
+                    <span
+                      key={`direct-${moveId}`}
+                      className="inline-block text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap bg-accent-blue/20 text-blue-300 border-accent-blue/30"
+                    >
+                      {move?.nameTw ?? moveId}
+                    </span>
+                  );
+                })}
+              </>
+            ) : matchedMoves ? (
+              matchedMoves.map(({ moveId, sourceSpeciesId }) => {
+                const move = moveFilter.find((m) => toShowdownId(m.name) === moveId);
+                if (!move) return null;
+                const isInherited = sourceSpeciesId !== speciesIdForDisplay;
+                return (
+                  <span
+                    key={move.name}
+                    title={isInherited ? `繼承自 ${sourceSpeciesId}` : undefined}
+                    className={`inline-block text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap ${
+                      isInherited
+                        ? "bg-purple-900/30 text-purple-300 border-purple-500/40"
+                        : "bg-accent-blue/20 text-blue-300 border-accent-blue/30"
+                    }`}
+                  >
+                    {move.nameTw}
+                  </span>
+                );
+              })
+            ) : (
+              moveFilter.map((move) => {
+                const canLearn = move.learnedByPokemon.some(
+                  (lp) => lp.id === pokemon.id || lp.name === pokemon.name
+                );
+                return canLearn ? (
+                  <span
+                    key={move.name}
+                    className="inline-block text-[10px] px-1.5 py-0.5 rounded bg-accent-blue/20 text-blue-300 border border-accent-blue/30 whitespace-nowrap"
+                  >
+                    {move.nameTw}
+                  </span>
+                ) : null;
+              })
+            )}
           </div>
         </td>
       )}

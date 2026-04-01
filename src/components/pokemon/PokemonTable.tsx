@@ -33,7 +33,7 @@ export function PokemonTable() {
   const filtered = useFilteredPokemon(allPokemon, filterState, sortConfig);
   const [selectedPokemon, setSelectedPokemon] = useState<PokemonSummary | null>(null);
 
-  const hasMoveFilter = filterState.moveFilter.length > 0;
+  const hasMoveFilter = filterState.moveFilter.length > 0 || filterState.moveGroupFilter.length > 0;
   const TOTAL_COLS = BASE_COLS + (hasMoveFilter ? 1 : 0);
 
   const handleSort = (key: SortKey) => {
@@ -222,7 +222,7 @@ export function PokemonTable() {
               </tr>
             ) : (
               filtered.map((p) => (
-                <PokemonRow key={p.id} pokemon={p} onClick={setSelectedPokemon} moveFilter={filterState.moveFilter} />
+                <PokemonRow key={p.id} pokemon={p} onClick={setSelectedPokemon} moveFilter={filterState.moveFilter} moveGroupFilter={filterState.moveGroupFilter} />
               ))
             )}
           </tbody>

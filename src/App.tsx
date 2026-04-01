@@ -1,16 +1,26 @@
 import { useState } from "react";
 import { PokemonProvider } from "./stores/usePokemonStore";
 import { MoveProvider } from "./stores/useMoveStore";
+import { ShowdownProvider } from "./stores/useShowdownStore";
 import { PokemonTable } from "./components/pokemon/PokemonTable";
 import { MoveSearchPanel } from "./components/moves/MoveSearchPanel";
 import { LoadingBar } from "./components/ui/LoadingBar";
 import { usePokemonStore } from "./stores/usePokemonStore";
+import { ShowdownDebugPanel } from "./components/debug/ShowdownDebugPanel";
 
-type Tab = "pokemon" | "moves";
+const IS_DEV = import.meta.env.DEV;
+
+type Tab = "pokemon" | "moves" | "debug";
 
 function AppContent() {
   const [activeTab, setActiveTab] = useState<Tab>("pokemon");
   const { loadingState, loadingProgress, loadingTotal, resetFilters } = usePokemonStore();
+
+  const tabs: { key: Tab; label: string }[] = [
+    { key: "pokemon", label: "寶可夢篩選" },
+    { key: "moves", label: "招式查詢" },
+    ...(IS_DEV ? [{ key: "debug" as Tab, label: "🛠 除錯" }] : []),
+  ];
 
   return (
     <div className="h-screen bg-surface flex flex-col overflow-hidden">
@@ -26,12 +36,7 @@ function AppContent() {
 
           {/* Tabs */}
           <nav className="flex gap-1">
-            {(
-              [
-                { key: "pokemon", label: "寶可夢篩選" },
-                { key: "moves", label: "招式查詢" },
-              ] as { key: Tab; label: string }[]
-            ).map((tab) => (
+            {tabs.map((tab) => (
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
@@ -59,19 +64,24 @@ function AppContent() {
 
       {/* Main content */}
       <main className="flex-1 overflow-hidden">
-        {activeTab === "pokemon" ? <PokemonTable /> : <MoveSearchPanel />}
+        {activeTab === "pokemon" && <PokemonTable />}
+        {activeTab === "moves" && <MoveSearchPanel />}
+        {activeTab === "debug" && IS_DEV && <ShowdownDebugPanel />}
       </main>
     </div>
   );
 }
 
+
 function App() {
   return (
-    <PokemonProvider>
-      <MoveProvider>
-        <AppContent />
-      </MoveProvider>
-    </PokemonProvider>
+    <ShowdownProvider>
+      <PokemonProvider>
+        <MoveProvider>
+          <AppContent />
+        </MoveProvider>
+      </PokemonProvider>
+    </ShowdownProvider>
   );
 }
 
