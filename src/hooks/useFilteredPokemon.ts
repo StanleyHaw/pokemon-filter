@@ -2,6 +2,10 @@ import { useMemo } from "react";
 import { PokemonSummary, FilterState, SortConfig, StatKey } from "../types/pokemon";
 import { DEFAULT_STAT_RANGES } from "../constants/stats";
 import { RESTRICTED_LEGENDARY_IDS } from "../constants/restrictedLegendaries";
+import { useShowdownStore } from "../stores/useShowdownStore";
+import { canLearnAllMovesInChain } from "../lib/showdown/normalizeLearnset";
+import { toShowdownId, resolveLearnsetId } from "../lib/showdown/showdownId";
+import { canSatisfyMoveGroupConditions } from "../lib/showdown/queryMoveGroups";
 
 const UNRESTRICTED_ABILITY_NAMES = new Set(["protosynthesis", "quark-drive", "beast-boost"]);
 
@@ -25,6 +29,8 @@ export function useFilteredPokemon(
   filterState: FilterState,
   sortConfig: SortConfig
 ): PokemonSummary[] {
+  const { learnsetIndex, speciesLearnsetMap, species: showdownSpecies, moves } = useShowdownStore();
+
   return useMemo(() => {
     let result = allPokemon;
 
@@ -146,13 +152,88 @@ export function useFilteredPokemon(
       }
     }
 
-    // Move filter (intersection: Pokémon must be able to learn ALL selected moves)
-    if (filterState.moveFilter.length > 0) {
-      result = result.filter((p) =>
-        filterState.moveFilter.every((move) =>
-          move.learnedByPokemon.some((lp) => lp.id === p.id || lp.name === p.name)
-        )
-      );
+    // Move filter + Move group filter（合併為一次查詢避免重複展開進化鏈）
+    const hasDirectMoves = filterState.moveFilter.length > 0;
+    const hasGroupFilter = filterState.moveGroupFilter.length > 0;
+
+    if (hasDirectMoves || hasGroupFilter) {
+      if (learnsetIndex) {
+        if (hasGroupFilter) {
+          // Group 路徑：透過 getMatchedMovesByConditions 合併處理 group + direct
+          const directMoveIds = filterState.moveFilter.map((m) => toShowdownId(m.name));
+          result = result.filter((p) => {
+            const speciesId =
+              speciesLearnsetMap.get(toShowdownId(p.name)) ??
+              resolveLearnsetId(p.name, learnsetIndex.bySpecies);
+            return canSatisfyMoveGroupConditions(
+              speciesId,
+              { anyOfGroups: filterState.moveGroupFilter, allOfMoves: directMoveIds },
+              learnsetIndex,
+              showdownSpecies
+            );
+          });
+        } else {
+          // 純 direct move 路徑（原有邏輯不變）
+          const moveIds = filterState.moveFilter.map((m) => toShowdownId(m.name));
+          result = result.filter((p) => {
+            const speciesId =
+              speciesLearnsetMap.get(toShowdownId(p.name)) ??
+              resolveLearnsetId(p.name, learnsetIndex.bySpecies);
+            return canLearnAllMovesInChain(learnsetIndex, speciesId, moveIds, showdownSpecies);
+          });
+        }
+      } else {
+        // PokéAPI 降級路徑（僅處理 direct moves，group 需要 Showdown 資料）
+        if (hasDirectMoves) {
+          result = result.filter((p) =>
+            filterState.moveFilter.every((move) =>
+              move.learnedByPokemon.some((lp) => lp.id === p.id || lp.name === p.name)
+            )
+          );
+        }
+      }
+    }
+
+    // Move tag filter: Pokémon's learnset must contain at least one move matching ALL selected tags
+    if (filterState.moveTagFilter.length > 0 && moves) {
+      const tags = filterState.moveTagFilter;
+      result = result.filter((p) => {
+        const speciesId =
+          speciesLearnsetMap.get(toShowdownId(p.name)) ??
+          (learnsetIndex ? resolveLearnsetId(p.name, learnsetIndex.bySpecies) : toShowdownId(p.name));
+
+        // Collect all move IDs this Pokémon can learn (self + prevo chain)
+        const chain = learnsetIndex
+          ? [speciesId, ...(() => {
+              const preChain: string[] = [];
+              let cur = speciesId;
+              const visited = new Set<string>();
+              while (true) {
+                const sp = showdownSpecies[cur];
+                if (!sp?.prevo) break;
+                const prevoId = toShowdownId(sp.prevo);
+                if (visited.has(prevoId)) break;
+                visited.add(prevoId);
+                preChain.push(prevoId);
+                cur = prevoId;
+              }
+              return preChain;
+            })()]
+          : [speciesId];
+
+        const learnableMoveIds = new Set<string>();
+        for (const id of chain) {
+          const sp = showdownSpecies[id];
+          const lookupId = sp?.learnsetId ?? id;
+          learnsetIndex?.bySpecies.get(lookupId)?.forEach((m) => learnableMoveIds.add(m));
+        }
+
+        // Check if any learnable move satisfies all selected tags
+        return [...learnableMoveIds].some((moveId) => {
+          const move = moves[moveId];
+          return move && tags.every((tag) => move.tags[tag]);
+        });
+      });
     }
 
     // Stat range filters
@@ -193,5 +274,5 @@ export function useFilteredPokemon(
     });
 
     return result;
-  }, [allPokemon, filterState, sortConfig]);
+  }, [allPokemon, filterState, sortConfig, learnsetIndex, speciesLearnsetMap, showdownSpecies, moves]); // filterState includes moveGroupFilter
 }

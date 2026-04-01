@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer, useCallback, ReactNode, createElement, useEffect, useRef } from "react";
-import { PokemonSummary, FilterState, SortConfig, StatKey, TypeFilterMode, EvolutionCategory, TriState, MoveDetail } from "../types/pokemon";
+import { PokemonSummary, FilterState, SortConfig, StatKey, TypeFilterMode, EvolutionCategory, TriState, MoveDetail, MoveTags, MoveGroupId } from "../types/pokemon";
 import { DEFAULT_STAT_RANGES } from "../constants/stats";
 import { LoadingState, initializeData } from "../services/dataLoader";
 import { MoveLoadingState, initializeMoveData } from "../services/moveLoader";
@@ -40,6 +40,8 @@ const defaultFilter: FilterState = {
   singleTypeOnly: false,
   dualTypeOnly: false,
   moveFilter: [] as MoveDetail[],
+  moveTagFilter: [] as (keyof MoveTags)[],
+  moveGroupFilter: [] as MoveGroupId[],
 };
 
 function reducer(state: PokemonState, action: Action): PokemonState {
@@ -96,6 +98,8 @@ export interface PokemonContextValue extends PokemonState {
   setEvolutionFilterItem: (cat: EvolutionCategory, state: TriState) => void;
   toggleAbilityFilter: (name: string) => void;
   toggleMoveFilter: (move: MoveDetail) => void;
+  toggleMoveTagFilter: (tag: keyof MoveTags) => void;
+  toggleMoveGroupFilter: (groupId: MoveGroupId) => void;
 }
 
 const PokemonContext = createContext<PokemonContextValue | null>(null);
@@ -206,6 +210,18 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
     dispatch({ type: "SET_FILTER", payload: { moveFilter: next } });
   }, [state.filterState.moveFilter]);
 
+  const toggleMoveTagFilter = useCallback((tag: keyof MoveTags) => {
+    const current = state.filterState.moveTagFilter;
+    const next = current.includes(tag) ? current.filter((t) => t !== tag) : [...current, tag];
+    dispatch({ type: "SET_FILTER", payload: { moveTagFilter: next } });
+  }, [state.filterState.moveTagFilter]);
+
+  const toggleMoveGroupFilter = useCallback((groupId: MoveGroupId) => {
+    const current = state.filterState.moveGroupFilter;
+    const next = current.includes(groupId) ? current.filter((g) => g !== groupId) : [...current, groupId];
+    dispatch({ type: "SET_FILTER", payload: { moveGroupFilter: next } });
+  }, [state.filterState.moveGroupFilter]);
+
   const value: PokemonContextValue = {
     ...state,
     setFilter,
@@ -218,6 +234,8 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
     setEvolutionFilterItem,
     toggleAbilityFilter,
     toggleMoveFilter,
+    toggleMoveTagFilter,
+    toggleMoveGroupFilter,
   };
 
   return createElement(PokemonContext.Provider, { value }, children);

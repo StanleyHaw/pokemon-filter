@@ -1,4 +1,8 @@
 export type StatKey = "hp" | "attack" | "defense" | "spAtk" | "spDef" | "speed" | "total";
+import type { MoveTags } from "./move";
+export type { MoveTags };
+import type { MoveGroupId } from "../constants/moveGroups";
+export type { MoveGroupId };
 export type SortDirection = "asc" | "desc";
 export type DamageClass = "physical" | "special" | "status";
 
@@ -63,6 +67,10 @@ export interface FilterState {
   singleTypeOnly: boolean;
   dualTypeOnly: boolean;
   moveFilter: MoveDetail[];
+  /** 招式標籤篩選（交集：寶可夢招式庫中至少一個招式同時符合所有選中 tag） */
+  moveTagFilter: (keyof MoveTags)[];
+  /** 自訂招式群組篩選（各群組間 AND，群組內 OR） */
+  moveGroupFilter: MoveGroupId[];
 }
 
 export interface SortConfig {
