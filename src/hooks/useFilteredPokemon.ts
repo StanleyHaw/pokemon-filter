@@ -159,7 +159,7 @@ export function useFilteredPokemon(
           const parentAlsoHasPreEvo = p.evolvesFromId !== null && speciesWithPreEvo.has(p.evolvesFromId);
           switch (cat) {
             case "final":     return hasPreEvo && !hasNextEvo;
-            case "solo":      return !hasPreEvo && !hasNextEvo && !p.hasMega;
+            case "solo":      return !hasPreEvo && !hasNextEvo;
             case "baby":      return !hasPreEvo && hasNextEvo;
             case "mega":      return p.name.includes("-mega") || p.name.includes("-primal");
             case "has-mega":  return p.hasMega && !p.name.includes("-mega") && !p.name.includes("-primal");
