@@ -77,6 +77,12 @@ export interface MoveGroupConditions {
    * 例如 ["fakeout", "uturn"]
    */
   allOfMoves?: string[];
+
+  /**
+   * 各群組預先過濾後的候選招式列表（由呼叫端傳入，避免重複計算）
+   * 若有提供，優先使用此列表而非從 MOVE_GROUPS 重新解析
+   */
+  refinedGroupMoves?: Partial<Record<MoveGroupId, string[]>>;
 }
 
 export interface MoveGroupMatchResult {

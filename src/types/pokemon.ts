@@ -53,6 +53,15 @@ export type TypeFilterMode = "intersection" | "union";
 export type EvolutionCategory = "final" | "solo" | "baby" | "mega" | "has-mega" | "middle" | "twice" | "branching";
 export type TriState = "only" | "exclude" | null;
 
+export interface TacticalMoveFilters {
+  damageClass: string;
+  type: string;
+  powerMin: number;
+  powerMax: number;
+  accuracyMin: number;
+  accuracyMax: number;
+}
+
 export interface FilterState {
   statRanges: Record<StatKey, [number, number]>;
   types: string[];
@@ -71,6 +80,7 @@ export interface FilterState {
   moveTagFilter: (keyof MoveTags)[];
   /** 自訂招式群組篩選（各群組間 AND，群組內 OR） */
   moveGroupFilter: MoveGroupId[];
+  tacticalMoveFilters: TacticalMoveFilters;
 }
 
 export interface SortConfig {

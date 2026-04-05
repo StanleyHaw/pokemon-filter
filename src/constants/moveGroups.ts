@@ -9,6 +9,7 @@
  *   1. 在 MoveGroupId union 加入新 key
  *   2. 在 MOVE_GROUPS 加入對應的定義
  */
+import type { MoveTags } from "../types/move";
 
 export type MoveGroupId =
   | "pivotMoves"
@@ -19,7 +20,12 @@ export type MoveGroupId =
   | "weatherSetters"
   | "terrainSetters"
   | "trappingMoves"
-  | "statusMoves";
+  | "statusMoves"
+  | "contactMoves"
+  | "soundMoves"
+  | "punchMoves"
+  | "biteMoves"
+  | "slicingMoves";
 
 export interface MoveGroupDef {
   id: MoveGroupId;
@@ -27,8 +33,10 @@ export interface MoveGroupDef {
   label: string;
   /** 工具提示說明 */
   description: string;
-  /** Showdown move ID 列表 */
+  /** Showdown move ID 列表（tag-backed 群組為空陣列，以 tag 欄位判斷） */
   moveIds: readonly string[];
+  /** 招式旗標 key（tag-backed 群組專用，優先於 moveIds） */
+  tag?: keyof MoveTags;
 }
 
 export const MOVE_GROUPS: Record<MoveGroupId, MoveGroupDef> = {
@@ -188,6 +196,42 @@ export const MOVE_GROUPS: Record<MoveGroupId, MoveGroupDef> = {
       "sleeppowder",
       "spore",
     ],
+  },
+  // ── tag-backed 群組（moveIds 留空，以 tag 欄位動態解析） ──
+  contactMoves: {
+    id: "contactMoves",
+    label: "接觸技",
+    description: "會觸發對手接觸特性的招式",
+    moveIds: [],
+    tag: "isContactMove",
+  },
+  soundMoves: {
+    id: "soundMoves",
+    label: "聲音技",
+    description: "基於聲音的招式，可穿透替身",
+    moveIds: [],
+    tag: "isSoundMove",
+  },
+  punchMoves: {
+    id: "punchMoves",
+    label: "拳招",
+    description: "受鐵拳特性強化的招式",
+    moveIds: [],
+    tag: "isPunchMove",
+  },
+  biteMoves: {
+    id: "biteMoves",
+    label: "咬招",
+    description: "受大顎特性強化的招式",
+    moveIds: [],
+    tag: "isBiteMove",
+  },
+  slicingMoves: {
+    id: "slicingMoves",
+    label: "斬擊技",
+    description: "受鋒銳特性強化的招式",
+    moveIds: [],
+    tag: "isSlicingMove",
   },
 };
 

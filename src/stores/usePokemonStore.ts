@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer, useCallback, ReactNode, createElement, useEffect, useRef } from "react";
-import { PokemonSummary, FilterState, SortConfig, StatKey, TypeFilterMode, EvolutionCategory, TriState, MoveDetail, MoveTags, MoveGroupId } from "../types/pokemon";
+import { PokemonSummary, FilterState, SortConfig, StatKey, TypeFilterMode, EvolutionCategory, TriState, MoveDetail, MoveTags, MoveGroupId, TacticalMoveFilters } from "../types/pokemon";
 import { DEFAULT_STAT_RANGES } from "../constants/stats";
 import { LoadingState, initializeData } from "../services/dataLoader";
 import { MoveLoadingState, initializeMoveData } from "../services/moveLoader";
@@ -26,6 +26,15 @@ type Action =
   | { type: "SET_SORT"; payload: SortConfig }
   | { type: "RESET_FILTERS" };
 
+const defaultTacticalMoveFilters: TacticalMoveFilters = {
+  damageClass: '',
+  type: '',
+  powerMin: 0,
+  powerMax: 250,
+  accuracyMin: 0,
+  accuracyMax: 100,
+};
+
 const defaultFilter: FilterState = {
   statRanges: { ...DEFAULT_STAT_RANGES },
   types: [],
@@ -42,6 +51,7 @@ const defaultFilter: FilterState = {
   moveFilter: [] as MoveDetail[],
   moveTagFilter: [] as (keyof MoveTags)[],
   moveGroupFilter: [] as MoveGroupId[],
+  tacticalMoveFilters: { ...defaultTacticalMoveFilters },
 };
 
 function reducer(state: PokemonState, action: Action): PokemonState {
@@ -100,6 +110,8 @@ export interface PokemonContextValue extends PokemonState {
   toggleMoveFilter: (move: MoveDetail) => void;
   toggleMoveTagFilter: (tag: keyof MoveTags) => void;
   toggleMoveGroupFilter: (groupId: MoveGroupId) => void;
+  setTacticalMoveFilter: (partial: Partial<TacticalMoveFilters>) => void;
+  resetTacticalMoveFilters: () => void;
 }
 
 const PokemonContext = createContext<PokemonContextValue | null>(null);
@@ -222,6 +234,14 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
     dispatch({ type: "SET_FILTER", payload: { moveGroupFilter: next } });
   }, [state.filterState.moveGroupFilter]);
 
+  const setTacticalMoveFilter = useCallback((partial: Partial<TacticalMoveFilters>) => {
+    dispatch({ type: "SET_FILTER", payload: { tacticalMoveFilters: { ...state.filterState.tacticalMoveFilters, ...partial } } });
+  }, [state.filterState.tacticalMoveFilters]);
+
+  const resetTacticalMoveFilters = useCallback(() => {
+    dispatch({ type: "SET_FILTER", payload: { tacticalMoveFilters: { ...defaultTacticalMoveFilters } } });
+  }, []);
+
   const value: PokemonContextValue = {
     ...state,
     setFilter,
@@ -236,6 +256,8 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
     toggleMoveFilter,
     toggleMoveTagFilter,
     toggleMoveGroupFilter,
+    setTacticalMoveFilter,
+    resetTacticalMoveFilters,
   };
 
   return createElement(PokemonContext.Provider, { value }, children);
