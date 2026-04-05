@@ -1,4 +1,4 @@
-import { PokemonSummary, MoveDetail } from '../../types/pokemon';
+import { PokemonSummary, MoveDetail, TacticalMoveFilters } from '../../types/pokemon';
 import { TYPE_LABELS } from '../../constants/types';
 import { getTypeIconUrl } from '../../constants/typeIcons';
 import { getAvatarUrl, getAvatarFallbackUrl } from '../../utils/avatar';
@@ -16,6 +16,7 @@ interface Props {
   onClick: (p: PokemonSummary) => void;
   moveFilter?: MoveDetail[];
   moveGroupFilter?: MoveGroupId[];
+  tacticalMoveFilters?: TacticalMoveFilters;
 }
 
 /** Full-width type badge for table cells */
@@ -281,20 +282,72 @@ function AbilityCellBadge({ name }: { name: string | null }) {
 const tdCenter = 'px-2 py-1.5 text-center text-xs text-white align-middle';
 const tdBorder = 'border-l border-surface-border';
 
-export function PokemonRow({ pokemon, onClick, moveFilter = [], moveGroupFilter = [] }: Props) {
+export function PokemonRow({ pokemon, onClick, moveFilter = [], moveGroupFilter = [], tacticalMoveFilters }: Props) {
   const s = pokemon.stats;
   const avatarUrl = getAvatarUrl(pokemon.name);
   const fallbackUrl = getAvatarFallbackUrl(pokemon.name);
   const nameTw = applyFormPrefix(pokemon.name, getPokemonNameTw(pokemon.speciesId) || pokemon.nameTw);
   const isRestricted = RESTRICTED_LEGENDARY_IDS.has(pokemon.speciesId);
 
-  const { learnsetIndex, speciesLearnsetMap, species: showdownSpecies } = useShowdownStore();
+  const { learnsetIndex, speciesLearnsetMap, species: showdownSpecies, moves } = useShowdownStore();
 
   // 計算本次篩選條件中，此 Pokémon 實際成立的招式（含進化鏈繼承）
   const speciesIdForDisplay = learnsetIndex
     ? (speciesLearnsetMap.get(toShowdownId(pokemon.name)) ??
        resolveLearnsetId(pokemon.name, learnsetIndex.bySpecies))
     : toShowdownId(pokemon.name);
+
+  // tag-backed groups 的命中招式來自動態 tag 查詢，不能用靜態 moveIds（為空陣列）
+  // 此處預先建立 refinedGroupMoves，讓 getMatchedMovesByConditions 能正確回傳 matchedGroupMoves
+  //
+  // 同時套用 tacticalMoveFilters，確保 chip 顯示與篩選結果完全一致（single source of truth）。
+  const refinedGroupMovesForDisplay: Partial<Record<MoveGroupId, string[]>> = {};
+  if (moveGroupFilter.length > 0 && moves) {
+    const tf = tacticalMoveFilters;
+    const hasTactical = !!tf && (
+      tf.damageClass !== '' ||
+      tf.type !== '' ||
+      tf.powerMin > 0 ||
+      tf.powerMax < 250 ||
+      tf.accuracyMin > 0 ||
+      tf.accuracyMax < 100
+    );
+
+    const applyTactical = (moveId: string): boolean => {
+      if (!tf || !hasTactical) return true;
+      const move = moves[moveId];
+      if (!move) return true; // 無資料 → 保留（安全降級）
+      if (tf.damageClass && move.category !== tf.damageClass) return false;
+      if (tf.type && move.type.toLowerCase() !== tf.type.toLowerCase()) return false;
+      if (tf.powerMin > 0 || tf.powerMax < 250) {
+        if (tf.powerMin > 0 && move.basePower === 0) return false;
+        if (move.basePower < tf.powerMin || move.basePower > tf.powerMax) return false;
+      }
+      if (tf.accuracyMin > 0 || tf.accuracyMax < 100) {
+        if (move.accuracy === null) {
+          if (tf.accuracyMin > 0) return false;
+        } else {
+          if (move.accuracy < tf.accuracyMin || move.accuracy > tf.accuracyMax) return false;
+        }
+      }
+      return true;
+    };
+
+    for (const groupId of moveGroupFilter) {
+      const groupDef = MOVE_GROUPS[groupId];
+      if (groupDef.tag) {
+        // tag-backed group：先從 moves 動態取出符合 tag 的招式，再套用 tactical filter
+        const tagKey = groupDef.tag;
+        refinedGroupMovesForDisplay[groupId] = Object.keys(moves)
+          .filter((moveId) => moves[moveId]?.tags[tagKey] && applyTactical(moveId));
+      } else if (hasTactical) {
+        // 靜態群組：有 tactical 條件時也需要收斂，確保 chip 與篩選一致
+        refinedGroupMovesForDisplay[groupId] = (MOVE_GROUPS[groupId].moveIds as string[])
+          .filter(applyTactical);
+      }
+      // 靜態群組且無 tactical 條件：不設定 → fallback 到 MOVE_GROUPS[id].moveIds
+    }
+  }
 
   // group 模式：使用 getMatchedMovesByConditions 取得命中明細
   const groupMatchResult = learnsetIndex && moveGroupFilter.length > 0
@@ -303,6 +356,7 @@ export function PokemonRow({ pokemon, onClick, moveFilter = [], moveGroupFilter 
         {
           anyOfGroups: moveGroupFilter,
           allOfMoves: moveFilter.map((m) => toShowdownId(m.name)),
+          refinedGroupMoves: refinedGroupMovesForDisplay,
         },
         learnsetIndex,
         showdownSpecies
@@ -471,7 +525,7 @@ export function PokemonRow({ pokemon, onClick, moveFilter = [], moveGroupFilter 
                           title={MOVE_GROUPS[groupId].label}
                           className="inline-block text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap bg-orange-900/30 text-orange-300 border-orange-500/40"
                         >
-                          {moveId}
+                          {moves?.[moveId]?.nameTw || moves?.[moveId]?.name || moveId}
                         </span>
                       ))
                   );
@@ -484,7 +538,7 @@ export function PokemonRow({ pokemon, onClick, moveFilter = [], moveGroupFilter 
                       key={`direct-${moveId}`}
                       className="inline-block text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap bg-accent-blue/20 text-blue-300 border-accent-blue/30"
                     >
-                      {move?.nameTw ?? moveId}
+                      {moves?.[moveId]?.nameTw || move?.nameTw || move?.name || moveId}
                     </span>
                   );
                 })}
@@ -504,7 +558,7 @@ export function PokemonRow({ pokemon, onClick, moveFilter = [], moveGroupFilter 
                         : "bg-accent-blue/20 text-blue-300 border-accent-blue/30"
                     }`}
                   >
-                    {move.nameTw}
+                    {moves?.[moveId]?.nameTw || move.nameTw || move.name || moveId}
                   </span>
                 );
               })
@@ -518,7 +572,7 @@ export function PokemonRow({ pokemon, onClick, moveFilter = [], moveGroupFilter 
                     key={move.name}
                     className="inline-block text-[10px] px-1.5 py-0.5 rounded bg-accent-blue/20 text-blue-300 border border-accent-blue/30 whitespace-nowrap"
                   >
-                    {move.nameTw}
+                    {moves?.[toShowdownId(move.name)]?.nameTw || move.nameTw || move.name}
                   </span>
                 ) : null;
               })
