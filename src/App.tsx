@@ -7,6 +7,7 @@ import { MoveSearchPanel } from "./components/moves/MoveSearchPanel";
 import { LoadingBar } from "./components/ui/LoadingBar";
 import { usePokemonStore } from "./stores/usePokemonStore";
 import { ShowdownDebugPanel } from "./components/debug/ShowdownDebugPanel";
+import { useStoreBridge } from "./dev/useStoreBridge";
 
 const IS_DEV = import.meta.env.DEV;
 
@@ -15,6 +16,7 @@ type Tab = "pokemon" | "moves" | "debug";
 function AppContent() {
   const [activeTab, setActiveTab] = useState<Tab>("pokemon");
   const { loadingState, loadingProgress, loadingTotal, resetFilters } = usePokemonStore();
+  useStoreBridge(); // dev-only: 掛載 window.__pokemonStore，正式 build 無作用
 
   const tabs: { key: Tab; label: string }[] = [
     { key: "pokemon", label: "寶可夢篩選" },
