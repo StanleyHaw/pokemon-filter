@@ -1,8 +1,33 @@
 export type StatKey = "hp" | "attack" | "defense" | "spAtk" | "spDef" | "speed" | "total";
+
+/**
+ * 戰術招式篩選子條件
+ *
+ * 僅在 moveGroupFilter 有選擇時生效，用來收斂各群組內的候選招式。
+ * 這些條件不影響 direct move search（moveFilter）。
+ */
+export interface TacticalMoveFilters {
+  /** 物理 / 特殊 / 變化；'' = 不限 */
+  damageClass: string;
+  /** 招式屬性（e.g. "fire"）；'' = 不限 */
+  type: string;
+  /**
+   * 目標範圍（Showdown target key）；'' = 不限
+   * @deprecated v1 UI 已停用（Phase 3.5 移除）。欄位保留供未來重接，但目前不影響任何篩選結果。
+   */
+  target: string;
+  powerMin: number;
+  powerMax: number;
+  /** 0 = 必中視為通過最低命中 */
+  accuracyMin: number;
+  accuracyMax: number;
+}
 import type { MoveTags } from "./move";
 export type { MoveTags };
 import type { MoveGroupId } from "../constants/moveGroups";
 export type { MoveGroupId };
+import type { AbilityGroupId } from "../constants/abilityGroups";
+export type { AbilityGroupId };
 export type SortDirection = "asc" | "desc";
 export type DamageClass = "physical" | "special" | "status";
 
@@ -71,6 +96,25 @@ export interface FilterState {
   moveTagFilter: (keyof MoveTags)[];
   /** 自訂招式群組篩選（各群組間 AND，群組內 OR） */
   moveGroupFilter: MoveGroupId[];
+  /**
+   * 自訂特性群組篩選（各群組間 AND，群組內 OR）
+   *
+   * 語意：對每個選中的群組，Pokémon 至少要有一個可用特性（特性一/二/隱藏特性）
+   * 屬於該群組，所有選中群組都需命中才保留（群組間 AND）。
+   * 判斷時以「任一可用特性集合」為準，不限制「實戰同時啟用的單一特性」。
+   *
+   * 與 abilityFilter（直接特性名稱搜尋）的關係：
+   * 兩者之間是 AND，同時有 abilityFilter 與 abilityGroupFilter 時，
+   * Pokémon 必須同時滿足兩個條件才保留。
+   */
+  abilityGroupFilter: AbilityGroupId[];
+  /**
+   * 戰術招式篩選子條件
+   *
+   * 只在 moveGroupFilter 有選擇時生效，用來收斂各群組內候選招式。
+   * 若 moveGroupFilter 為空，這些條件完全不影響任何篩選結果。
+   */
+  tacticalMoveFilters: TacticalMoveFilters;
 }
 
 export interface SortConfig {
