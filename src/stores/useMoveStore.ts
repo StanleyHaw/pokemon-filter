@@ -2,6 +2,8 @@ import { createContext, useContext, useReducer, useCallback, ReactNode, createEl
 import { MoveDetail } from "../types/pokemon";
 import { fetchMove, fetchMoveList, fetchMovesByType, getNameTw, extractIdFromUrl } from "../services/pokeapi";
 import { putMove, putMoveBatch, getMoveByName, getAllMoves } from "../db/pokemonDB";
+import { MOVE_NAMES_TW } from "../constants/moveNamesCn";
+import { toShowdownId } from "../lib/showdown/showdownId";
 
 interface MoveState {
   searchName: string;
@@ -60,7 +62,7 @@ async function transformMove(raw: Awaited<ReturnType<typeof fetchMove>>): Promis
   return {
     id: raw.id,
     name: raw.name,
-    nameTw: getNameTw(raw.names) || raw.name,
+    nameTw: MOVE_NAMES_TW[toShowdownId(raw.name)] || getNameTw(raw.names) || raw.name,
     type: raw.type.name,
     damageClass: raw.damage_class.name as MoveDetail["damageClass"],
     category: raw.meta?.category?.name ?? "unique",

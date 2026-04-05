@@ -30,6 +30,9 @@ import { normalizeMoves } from "../lib/showdown/normalizeMoves";
 import { normalizePokedex } from "../lib/showdown/normalizeSpecies";
 import { buildLearnsetIndex } from "../lib/showdown/normalizeLearnset";
 import { buildSpeciesLearnsetMap } from "../lib/showdown/showdownId";
+import { MOVE_NAMES_TW } from "../constants/moveNamesCn";
+
+// MOVE_NAMES_TW 格式：{ showdownId: "繁體中文名" }，可直接傳給 normalizeMoves
 
 export type ShowdownStatus =
   | "idle"
@@ -86,7 +89,7 @@ export function ShowdownProvider({ children }: { children: ReactNode }) {
         if (cancelled) return;
 
         // 正規化（同步，但資料量大時約需 100–300ms）
-        const moves = normalizeMoves(rawMoves, {}, { excludePast: true });
+        const moves = normalizeMoves(rawMoves, MOVE_NAMES_TW, { excludePast: true });
         const species = normalizePokedex(rawPokedex, {}, { excludePast: true });
 
         // 建立 learnset 雙向索引（只納入第 9 世代，競技篩選用）

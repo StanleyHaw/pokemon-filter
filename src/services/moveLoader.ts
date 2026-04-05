@@ -1,6 +1,8 @@
 import { getAllMoves, putMoveBatch, getMeta, setMeta } from "../db/pokemonDB";
 import { fetchMoveList, fetchMove, getNameTw, extractIdFromUrl } from "./pokeapi";
 import { MoveDetail } from "../types/pokemon";
+import { MOVE_NAMES_TW } from "../constants/moveNamesCn";
+import { toShowdownId } from "../lib/showdown/showdownId";
 
 const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 const BATCH_SIZE = 10;
@@ -23,7 +25,7 @@ function transformRawMove(raw: Awaited<ReturnType<typeof fetchMove>>): MoveDetai
   return {
     id: raw.id,
     name: raw.name,
-    nameTw: getNameTw(raw.names) || raw.name,
+    nameTw: MOVE_NAMES_TW[toShowdownId(raw.name)] || getNameTw(raw.names) || raw.name,
     type: raw.type.name,
     damageClass: raw.damage_class.name as MoveDetail["damageClass"],
     category: raw.meta?.category?.name ?? "unique",
