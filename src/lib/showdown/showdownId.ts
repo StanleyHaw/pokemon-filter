@@ -84,13 +84,19 @@ export function resolveLearnsetId(
 /**
  * 從 NormalizedSpecies 批次建立 speciesId → learnsetId 的映射表
  * 供 useFilteredPokemon 快速查詢，避免每次逐一計算後綴
+ *
+ * @param learnsetBySpecies 若傳入，當 form 在 learnset index 中有獨立記錄時，
+ *                          直接以自身 ID 作為 learnsetId，不沿用基底種族記錄。
+ *                          例：zapdosgalar 有獨立 learnset → 使用 "zapdosgalar" 而非 "zapdos"
  */
 export function buildSpeciesLearnsetMap(
-  speciesRecord: Record<string, { learnsetId: string }>
+  speciesRecord: Record<string, { learnsetId: string }>,
+  learnsetBySpecies?: Map<string, unknown>
 ): Map<string, string> {
   const map = new Map<string, string>();
   for (const [id, species] of Object.entries(speciesRecord)) {
-    map.set(id, species.learnsetId);
+    const learnsetId = learnsetBySpecies?.has(id) ? id : species.learnsetId;
+    map.set(id, learnsetId);
   }
   return map;
 }

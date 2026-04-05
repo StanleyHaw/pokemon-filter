@@ -242,7 +242,9 @@ export function canLearnMoveInChain(
 
   return chain.some((id) => {
     const sp = speciesRecord[id];
-    const lookupId = sp?.learnsetId ?? id;
+    // 若該 form 在 learnset index 中有獨立記錄，優先使用自身 ID
+    // 避免 zapdosgalar 等有獨立 learnset 的地區形態錯誤沿用基底種族記錄
+    const lookupId = index.bySpecies.has(id) ? id : (sp?.learnsetId ?? id);
     return (index.bySpecies.get(lookupId)?.has(moveId) ?? false) ||
            getOverrideMoves(id).includes(moveId);
   });
