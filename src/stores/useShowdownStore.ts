@@ -96,7 +96,9 @@ export function ShowdownProvider({ children }: { children: ReactNode }) {
         // 若需要歷代資料可改 minGen: 1
         const learnsetIndex = buildLearnsetIndex(rawLearnsets, 9);
 
-        const speciesLearnsetMap = buildSpeciesLearnsetMap(species);
+        // 傳入 learnsetIndex.bySpecies，使有獨立 learnset 的地區形態（如 zapdosgalar）
+        // 不再被錯誤映射到基底種族（如 zapdos）的招式記錄
+        const speciesLearnsetMap = buildSpeciesLearnsetMap(species, learnsetIndex.bySpecies);
 
         if (cancelled) return;
 
@@ -108,13 +110,6 @@ export function ShowdownProvider({ children }: { children: ReactNode }) {
           speciesLearnsetMap,
         });
 
-        if (import.meta.env.DEV) {
-          console.log(
-            `[ShowdownStore] 載入完成｜招式: ${Object.keys(moves).length}｜` +
-            `種族: ${Object.keys(species).length}｜` +
-            `Learnset 種族數: ${learnsetIndex.bySpecies.size}`
-          );
-        }
       } catch (err) {
         if (cancelled) return;
 

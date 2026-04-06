@@ -33,6 +33,23 @@ const POKEAPI_FORM_OVERRIDES: Record<string, string> = {
   squawkabillyblueplumage:  "squawkabilly",
   squawkabillyyellowplumage: "squawkabilly",
   squawkabillywhiteplumage: "squawkabilly",
+
+  // 肯泰羅帕底亞三型態（Tauros Paldea，#128）
+  // PokéAPI 在名稱末尾附加 "-breed"，Showdown 無此後綴
+  taurospaldeacombatbreed: "taurospaldeacombat",
+  taurospaldeablazebreed:  "taurospaldeablaze",
+  taurospaldeaaquabreed:   "taurospaldeaaqua",
+
+  // 花舞鳥巴伊雷風格（Oricorio-Baile，#741）
+  // PokéAPI 預設型態可能以 "oricorio-baile" 回傳，Showdown 以基底 "oricorio" 作為 learnset key
+  oricoriobaile: "oricorio",
+
+  // 厄詭椪三面具型態（Ogerpon，#1017）
+  // PokéAPI 在 form name 末尾附加 "-mask"，Showdown pokedex key 無此後綴
+  // 是否退回基底 "ogerpon" 由現有 learnset fallback 邏輯決定
+  ogerponwellspringmask:   "ogerponwellspring",
+  ogerponhearthflamemask:  "ogerponhearthflame",
+  ogerponcornerstonemask:  "ogerponcornerstone",
 };
 
 /**
@@ -84,13 +101,19 @@ export function resolveLearnsetId(
 /**
  * 從 NormalizedSpecies 批次建立 speciesId → learnsetId 的映射表
  * 供 useFilteredPokemon 快速查詢，避免每次逐一計算後綴
+ *
+ * @param learnsetBySpecies 若傳入，當 form 在 learnset index 中有獨立記錄時，
+ *                          直接以自身 ID 作為 learnsetId，不沿用基底種族記錄。
+ *                          例：zapdosgalar 有獨立 learnset → 使用 "zapdosgalar" 而非 "zapdos"
  */
 export function buildSpeciesLearnsetMap(
-  speciesRecord: Record<string, { learnsetId: string }>
+  speciesRecord: Record<string, { learnsetId: string }>,
+  learnsetBySpecies?: Map<string, unknown>
 ): Map<string, string> {
   const map = new Map<string, string>();
   for (const [id, species] of Object.entries(speciesRecord)) {
-    map.set(id, species.learnsetId);
+    const learnsetId = learnsetBySpecies?.has(id) ? id : species.learnsetId;
+    map.set(id, learnsetId);
   }
   return map;
 }

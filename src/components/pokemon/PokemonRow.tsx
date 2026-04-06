@@ -292,9 +292,17 @@ export function PokemonRow({ pokemon, onClick, moveFilter = [], moveGroupFilter 
   const { learnsetIndex, speciesLearnsetMap, species: showdownSpecies, moves } = useShowdownStore();
 
   // 計算本次篩選條件中，此 Pokémon 實際成立的招式（含進化鏈繼承）
+  // 兩段式查詢：先直接查 map，miss 時以 speciesLearnsetMap 的 key 集合做 override 解析後再查
+  // 目的：讓 PokéAPI 特有後綴（-mask / -breed 等）能正確命中 speciesLearnsetMap
   const speciesIdForDisplay = learnsetIndex
-    ? (speciesLearnsetMap.get(toShowdownId(pokemon.name)) ??
-       resolveLearnsetId(pokemon.name, learnsetIndex.bySpecies))
+    ? (() => {
+        const raw = toShowdownId(pokemon.name);
+        const direct = speciesLearnsetMap.get(raw);
+        if (direct) return direct;
+        const speciesMapKeys = new Map([...speciesLearnsetMap.keys()].map((k) => [k, new Set<string>()]));
+        const via = speciesLearnsetMap.get(resolveLearnsetId(pokemon.name, speciesMapKeys));
+        return via ?? resolveLearnsetId(pokemon.name, learnsetIndex.bySpecies);
+      })()
     : toShowdownId(pokemon.name);
 
   // tag-backed groups 的命中招式來自動態 tag 查詢，不能用靜態 moveIds（為空陣列）
