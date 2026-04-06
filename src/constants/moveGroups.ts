@@ -13,7 +13,6 @@
  *   1. 在 MoveGroupId union 加入新 key
  *   2. 在 MOVE_GROUPS 加入對應的定義
  */
-
 import type { MoveTags } from "../types/move";
 
 export type MoveGroupId =

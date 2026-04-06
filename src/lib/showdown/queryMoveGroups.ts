@@ -54,7 +54,8 @@ function getLearnableSet(
 
   for (const id of chain) {
     const sp = speciesRecord[id];
-    const lookupId = sp?.learnsetId ?? id;
+    // 若 learnset index 中有此 form 的獨立記錄，優先使用自身 ID（與 canLearnAllMovesInChain 邏輯一致）
+    const lookupId = index.bySpecies.has(id) ? id : (sp?.learnsetId ?? id);
     index.bySpecies.get(lookupId)?.forEach((m) => learned.add(m));
     // override layer：納入模仿香草等特殊機制可學的招式
     getOverrideMoves(id).forEach((m) => learned.add(m));

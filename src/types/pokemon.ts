@@ -1,4 +1,16 @@
+import type { MoveTags } from "./move";
+export type { MoveTags };
+import type { MoveGroupId } from "../constants/moveGroups";
+export type { MoveGroupId };
+import type { AbilityGroupId } from "../constants/abilityGroups";
+export type { AbilityGroupId };
+
 export type StatKey = "hp" | "attack" | "defense" | "spAtk" | "spDef" | "speed" | "total";
+export type SortDirection = "asc" | "desc";
+export type DamageClass = "physical" | "special" | "status";
+export type TypeFilterMode = "intersection" | "union";
+export type EvolutionCategory = "final" | "solo" | "baby" | "mega" | "has-mega" | "middle" | "twice" | "branching";
+export type TriState = "only" | "exclude" | null;
 
 /**
  * 戰術招式篩選子條件
@@ -22,14 +34,6 @@ export interface TacticalMoveFilters {
   accuracyMin: number;
   accuracyMax: number;
 }
-import type { MoveTags } from "./move";
-export type { MoveTags };
-import type { MoveGroupId } from "../constants/moveGroups";
-export type { MoveGroupId };
-import type { AbilityGroupId } from "../constants/abilityGroups";
-export type { AbilityGroupId };
-export type SortDirection = "asc" | "desc";
-export type DamageClass = "physical" | "special" | "status";
 
 export interface PokemonSummary {
   id: number;
@@ -74,10 +78,6 @@ export interface MoveDetail {
   learnedByPokemon: { name: string; id: number; nameTw: string }[];
 }
 
-export type TypeFilterMode = "intersection" | "union";
-export type EvolutionCategory = "final" | "solo" | "baby" | "mega" | "has-mega" | "middle" | "twice" | "branching";
-export type TriState = "only" | "exclude" | null;
-
 export interface FilterState {
   statRanges: Record<StatKey, [number, number]>;
   types: string[];
@@ -108,12 +108,6 @@ export interface FilterState {
    * Pokémon 必須同時滿足兩個條件才保留。
    */
   abilityGroupFilter: AbilityGroupId[];
-  /**
-   * 戰術招式篩選子條件
-   *
-   * 只在 moveGroupFilter 有選擇時生效，用來收斂各群組內候選招式。
-   * 若 moveGroupFilter 為空，這些條件完全不影響任何篩選結果。
-   */
   tacticalMoveFilters: TacticalMoveFilters;
 }
 

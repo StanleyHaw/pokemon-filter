@@ -36,6 +36,37 @@ export function useFilteredPokemon(
   return useMemo(() => {
     let result = allPokemon;
 
+    // ── Tactical move filter helpers ──────────────────────────────────────────
+    const tf = filterState.tacticalMoveFilters;
+    const hasTactical = !!moves && (
+      tf.damageClass !== '' ||
+      tf.type !== '' ||
+      tf.powerMin > 0 ||
+      tf.powerMax < 250 ||
+      tf.accuracyMin > 0 ||
+      tf.accuracyMax < 100
+    );
+
+    /** 判斷單個招式是否符合所有 tactical 條件（無資料時保留） */
+    const applyTacticalMove = (moveId: string): boolean => {
+      const move = moves?.[moveId];
+      if (!move) return true;
+      if (tf.damageClass && move.category !== tf.damageClass) return false;
+      if (tf.type && move.type.toLowerCase() !== tf.type.toLowerCase()) return false;
+      if (tf.powerMin > 0 || tf.powerMax < 250) {
+        if (tf.powerMin > 0 && move.basePower === 0) return false;
+        if (move.basePower < tf.powerMin || move.basePower > tf.powerMax) return false;
+      }
+      if (tf.accuracyMin > 0 || tf.accuracyMax < 100) {
+        if (move.accuracy === null) {
+          if (tf.accuracyMin > 0) return false;
+        } else {
+          if (move.accuracy < tf.accuracyMin || move.accuracy > tf.accuracyMax) return false;
+        }
+      }
+      return true;
+    };
+
     // Text search
     const q = filterState.searchText.toLowerCase().trim();
     if (q) {
@@ -197,97 +228,41 @@ export function useFilteredPokemon(
     const hasGroupFilter = filterState.moveGroupFilter.length > 0;
     const hasMoveTagFilter = filterState.moveTagFilter.length > 0;
 
+    // speciesLearnsetMap 的 key 集合，供 resolveLearnsetId 做 override 解析用
+    // 目的：讓 PokéAPI 特有後綴（如 -mask、-breed）先對應到 pokedex key，再查 speciesLearnsetMap
+    // 只在 learnsetIndex 存在時才有意義
+    const speciesMapKeys: Map<string, Set<string>> = learnsetIndex
+      ? new Map([...speciesLearnsetMap.keys()].map((k) => [k, new Set<string>()]))
+      : new Map();
+
     if (hasDirectMoves || hasGroupFilter || hasMoveTagFilter) {
       if (learnsetIndex) {
         if (hasGroupFilter) {
-          // ── B. Tactical group 路徑 ─────────────────────────────────────
-          // moveTagFilter 不作為群組子條件，改為下方獨立並行 pass 處理。
-          const tf = filterState.tacticalMoveFilters;
+          const directMoveIds = filterState.moveFilter.map((m) => toShowdownId(m.name));
 
-          const hasTacticalConditions =
-            tf.damageClass !== '' ||
-            tf.type !== '' ||
-            tf.powerMin > 0 ||
-            tf.powerMax < 250 ||
-            tf.accuracyMin > 0 ||
-            tf.accuracyMax < 100;
-
-          // 每個群組預先收斂 moveIds（只套用 tacticalMoveFilters，不含 tags）
-          //
-          // tag-backed 群組（groupDef.tag 存在）：moveIds 為空，
-          // 改從 moves 資料動態建立候選集合，再套用 tacticalMoveFilters
           const refinedGroupMoves: Partial<Record<MoveGroupId, string[]>> = {};
-          for (const groupId of filterState.moveGroupFilter) {
-            const groupDef = MOVE_GROUPS[groupId];
-
-            // ── tag-backed 群組 ─────────────────────────────────────────
-            if (groupDef.tag) {
-              const tagKey = groupDef.tag;
-              // moves 尚未載入時，暫設空陣列（安全降級：不會誤判有符合）
-              let dynamicIds = moves
-                ? Object.keys(moves).filter((moveId) => moves[moveId]?.tags[tagKey])
-                : [];
-
-              if (hasTacticalConditions && moves) {
-                dynamicIds = dynamicIds.filter((moveId) => {
-                  const move = moves[moveId];
-                  if (!move) return true;
-                  if (tf.damageClass && move.category !== tf.damageClass) return false;
-                  if (tf.type && move.type.toLowerCase() !== tf.type.toLowerCase()) return false;
-                  // tf.target: v1 UI 已停用，此處不做 target 篩選
-                  if (tf.powerMin > 0 || tf.powerMax < 250) {
-                    if (tf.powerMin > 0 && move.basePower === 0) return false;
-                    if (move.basePower < tf.powerMin || move.basePower > tf.powerMax) return false;
-                  }
-                  if (tf.accuracyMin > 0 || tf.accuracyMax < 100) {
-                    if (move.accuracy === null) {
-                      if (tf.accuracyMin > 0) return false;
-                    } else {
-                      if (move.accuracy < tf.accuracyMin || move.accuracy > tf.accuracyMax) return false;
-                    }
-                  }
-                  return true;
-                });
-              }
-
-              refinedGroupMoves[groupId] = dynamicIds;
-
-            // ── 靜態 moveIds 群組 ───────────────────────────────────────
-            } else {
-              const rawIds = groupDef.moveIds as string[];
-              if (hasTacticalConditions && moves) {
-                refinedGroupMoves[groupId] = rawIds.filter((moveId) => {
-                  const move = moves[moveId];
-                  if (!move) return true; // 無資料 → 保留（安全降級）
-                  if (tf.damageClass && move.category !== tf.damageClass) return false;
-                  if (tf.type && move.type.toLowerCase() !== tf.type.toLowerCase()) return false;
-                  // tf.target: v1 UI 已停用，此處不做 target 篩選
-                  if (tf.powerMin > 0 || tf.powerMax < 250) {
-                    // 威力為 0 的招式（變化技等）在 powerMin > 0 時排除
-                    if (tf.powerMin > 0 && move.basePower === 0) return false;
-                    if (move.basePower < tf.powerMin || move.basePower > tf.powerMax) return false;
-                  }
-                  if (tf.accuracyMin > 0 || tf.accuracyMax < 100) {
-                    if (move.accuracy === null) {
-                      // 必中技：accuracyMin > 0 時不符合（必中不等於「高命中率」）
-                      if (tf.accuracyMin > 0) return false;
-                    } else {
-                      if (move.accuracy < tf.accuracyMin || move.accuracy > tf.accuracyMax) return false;
-                    }
-                  }
-                  return true;
-                });
-              } else {
-                refinedGroupMoves[groupId] = rawIds;
+          if (moves) {
+            for (const groupId of filterState.moveGroupFilter) {
+              const groupDef = MOVE_GROUPS[groupId];
+              if (groupDef.tag) {
+                const tagKey = groupDef.tag;
+                refinedGroupMoves[groupId] = Object.keys(moves).filter(
+                  (moveId) => moves[moveId]?.tags[tagKey] && (!hasTactical || applyTacticalMove(moveId))
+                );
+              } else if (hasTactical) {
+                // 靜態群組有 tactical 條件時，也需要收斂候選招式清單
+                refinedGroupMoves[groupId] = (MOVE_GROUPS[groupId].moveIds as string[]).filter(applyTacticalMove);
               }
             }
           }
 
-          const directMoveIds = filterState.moveFilter.map((m) => toShowdownId(m.name));
           result = result.filter((p) => {
-            const speciesId =
-              speciesLearnsetMap.get(toShowdownId(p.name)) ??
-              resolveLearnsetId(p.name, learnsetIndex.bySpecies);
+            // 三段 fallback，與 direct move 路徑保持一致
+            const showdownId = toShowdownId(p.name);
+            const mapped =
+              speciesLearnsetMap.get(showdownId) ??
+              speciesLearnsetMap.get(resolveLearnsetId(p.name, speciesMapKeys));
+            const speciesId = mapped ?? resolveLearnsetId(p.name, learnsetIndex.bySpecies);
             return canSatisfyMoveGroupConditions(
               speciesId,
               { anyOfGroups: filterState.moveGroupFilter, allOfMoves: directMoveIds, refinedGroupMoves },
@@ -296,13 +271,17 @@ export function useFilteredPokemon(
             );
           });
         } else {
-          // ── A. 純 direct move 路徑 ─────────────────────────────────────
+          // 純 direct move 路徑
           if (hasDirectMoves) {
             const moveIds = filterState.moveFilter.map((m) => toShowdownId(m.name));
             result = result.filter((p) => {
-              const speciesId =
-                speciesLearnsetMap.get(toShowdownId(p.name)) ??
-                resolveLearnsetId(p.name, learnsetIndex.bySpecies);
+              const showdownId = toShowdownId(p.name);
+              // 先直接查，若 miss 再透過 speciesMapKeys 做 override 解析後二次查
+              // 目的：讓 PokéAPI 特有後綴（-mask / -breed 等）能正確命中 speciesLearnsetMap
+              const mapped =
+                speciesLearnsetMap.get(showdownId) ??
+                speciesLearnsetMap.get(resolveLearnsetId(p.name, speciesMapKeys));
+              const speciesId = mapped ?? resolveLearnsetId(p.name, learnsetIndex.bySpecies);
               return canLearnAllMovesInChain(learnsetIndex, speciesId, moveIds, showdownSpecies);
             });
           }
@@ -364,6 +343,41 @@ export function useFilteredPokemon(
           );
         }
       }
+    }
+
+    // Standalone tactical move filter（無 group / direct move 時獨立生效）
+    // 條件：篩選出「進化鏈中至少有一招符合所有 tactical 條件」的寶可夢
+    if (hasTactical && !hasDirectMoves && !hasGroupFilter && learnsetIndex) {
+      result = result.filter((p) => {
+        const showdownId = toShowdownId(p.name);
+        const mapped =
+          speciesLearnsetMap.get(showdownId) ??
+          speciesLearnsetMap.get(resolveLearnsetId(p.name, speciesMapKeys));
+        const speciesId = mapped ?? resolveLearnsetId(p.name, learnsetIndex.bySpecies);
+
+        // 展開進化鏈（與 moveTagFilter 路徑邏輯一致）
+        const chain: string[] = [speciesId];
+        const visited = new Set<string>([speciesId]);
+        let cur = speciesId;
+        while (true) {
+          const sp = showdownSpecies[cur];
+          if (!sp?.prevo) break;
+          const prevoId = toShowdownId(sp.prevo);
+          if (visited.has(prevoId)) break;
+          visited.add(prevoId);
+          chain.push(prevoId);
+          cur = prevoId;
+        }
+
+        const learnableMoveIds = new Set<string>();
+        for (const id of chain) {
+          const sp = showdownSpecies[id];
+          const lookupId = learnsetIndex.bySpecies.has(id) ? id : (sp?.learnsetId ?? id);
+          learnsetIndex.bySpecies.get(lookupId)?.forEach((m) => learnableMoveIds.add(m));
+        }
+
+        return [...learnableMoveIds].some((moveId) => applyTacticalMove(moveId));
+      });
     }
 
     // Stat range filters
