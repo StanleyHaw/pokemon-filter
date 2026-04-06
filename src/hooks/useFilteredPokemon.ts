@@ -35,6 +35,37 @@ export function useFilteredPokemon(
   return useMemo(() => {
     let result = allPokemon;
 
+    // ── Tactical move filter helpers ──────────────────────────────────────────
+    const tf = filterState.tacticalMoveFilters;
+    const hasTactical = !!moves && (
+      tf.damageClass !== '' ||
+      tf.type !== '' ||
+      tf.powerMin > 0 ||
+      tf.powerMax < 250 ||
+      tf.accuracyMin > 0 ||
+      tf.accuracyMax < 100
+    );
+
+    /** 判斷單個招式是否符合所有 tactical 條件（無資料時保留） */
+    const applyTacticalMove = (moveId: string): boolean => {
+      const move = moves?.[moveId];
+      if (!move) return true;
+      if (tf.damageClass && move.category !== tf.damageClass) return false;
+      if (tf.type && move.type.toLowerCase() !== tf.type.toLowerCase()) return false;
+      if (tf.powerMin > 0 || tf.powerMax < 250) {
+        if (tf.powerMin > 0 && move.basePower === 0) return false;
+        if (move.basePower < tf.powerMin || move.basePower > tf.powerMax) return false;
+      }
+      if (tf.accuracyMin > 0 || tf.accuracyMax < 100) {
+        if (move.accuracy === null) {
+          if (tf.accuracyMin > 0) return false;
+        } else {
+          if (move.accuracy < tf.accuracyMin || move.accuracy > tf.accuracyMax) return false;
+        }
+      }
+      return true;
+    };
+
     // Text search
     const q = filterState.searchText.toLowerCase().trim();
     if (q) {
@@ -180,8 +211,11 @@ export function useFilteredPokemon(
               if (groupDef.tag) {
                 const tagKey = groupDef.tag;
                 refinedGroupMoves[groupId] = Object.keys(moves).filter(
-                  (moveId) => moves[moveId]?.tags[tagKey]
+                  (moveId) => moves[moveId]?.tags[tagKey] && (!hasTactical || applyTacticalMove(moveId))
                 );
+              } else if (hasTactical) {
+                // 靜態群組有 tactical 條件時，也需要收斂候選招式清單
+                refinedGroupMoves[groupId] = (MOVE_GROUPS[groupId].moveIds as string[]).filter(applyTacticalMove);
               }
             }
           }
@@ -265,6 +299,41 @@ export function useFilteredPokemon(
           const move = moves[moveId];
           return move && tags.every((tag) => move.tags[tag]);
         });
+      });
+    }
+
+    // Standalone tactical move filter（無 group / direct move 時獨立生效）
+    // 條件：篩選出「進化鏈中至少有一招符合所有 tactical 條件」的寶可夢
+    if (hasTactical && !hasDirectMoves && !hasGroupFilter && learnsetIndex) {
+      result = result.filter((p) => {
+        const showdownId = toShowdownId(p.name);
+        const mapped =
+          speciesLearnsetMap.get(showdownId) ??
+          speciesLearnsetMap.get(resolveLearnsetId(p.name, speciesMapKeys));
+        const speciesId = mapped ?? resolveLearnsetId(p.name, learnsetIndex.bySpecies);
+
+        // 展開進化鏈（與 moveTagFilter 路徑邏輯一致）
+        const chain: string[] = [speciesId];
+        const visited = new Set<string>([speciesId]);
+        let cur = speciesId;
+        while (true) {
+          const sp = showdownSpecies[cur];
+          if (!sp?.prevo) break;
+          const prevoId = toShowdownId(sp.prevo);
+          if (visited.has(prevoId)) break;
+          visited.add(prevoId);
+          chain.push(prevoId);
+          cur = prevoId;
+        }
+
+        const learnableMoveIds = new Set<string>();
+        for (const id of chain) {
+          const sp = showdownSpecies[id];
+          const lookupId = learnsetIndex.bySpecies.has(id) ? id : (sp?.learnsetId ?? id);
+          learnsetIndex.bySpecies.get(lookupId)?.forEach((m) => learnableMoveIds.add(m));
+        }
+
+        return [...learnableMoveIds].some((moveId) => applyTacticalMove(moveId));
       });
     }
 
