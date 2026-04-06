@@ -6,6 +6,7 @@ import { useShowdownStore } from "../stores/useShowdownStore";
 import { canLearnAllMovesInChain } from "../lib/showdown/normalizeLearnset";
 import { toShowdownId, resolveLearnsetId } from "../lib/showdown/showdownId";
 import { canSatisfyMoveGroupConditions } from "../lib/showdown/queryMoveGroups";
+import { MOVE_GROUPS, type MoveGroupId } from "../constants/moveGroups";
 
 const UNRESTRICTED_ABILITY_NAMES = new Set(["protosynthesis", "quark-drive", "beast-boost"]);
 
@@ -168,6 +169,23 @@ export function useFilteredPokemon(
         if (hasGroupFilter) {
           // Group 路徑：透過 getMatchedMovesByConditions 合併處理 group + direct
           const directMoveIds = filterState.moveFilter.map((m) => toShowdownId(m.name));
+
+          // 為 tag-backed group 預先展開招式清單
+          // tag-backed group（接觸技 / 聲音技 / 拳招 / 咬招 / 斬擊技）的 moveIds = []
+          // 必須在此動態從 moves 資料取出符合 tag 的招式，再傳給 canSatisfyMoveGroupConditions
+          const refinedGroupMoves: Partial<Record<MoveGroupId, string[]>> = {};
+          if (moves) {
+            for (const groupId of filterState.moveGroupFilter) {
+              const groupDef = MOVE_GROUPS[groupId];
+              if (groupDef.tag) {
+                const tagKey = groupDef.tag;
+                refinedGroupMoves[groupId] = Object.keys(moves).filter(
+                  (moveId) => moves[moveId]?.tags[tagKey]
+                );
+              }
+            }
+          }
+
           result = result.filter((p) => {
             // 三段 fallback，與 direct move 路徑保持一致
             const showdownId = toShowdownId(p.name);
@@ -177,7 +195,7 @@ export function useFilteredPokemon(
             const speciesId = mapped ?? resolveLearnsetId(p.name, learnsetIndex.bySpecies);
             return canSatisfyMoveGroupConditions(
               speciesId,
-              { anyOfGroups: filterState.moveGroupFilter, allOfMoves: directMoveIds },
+              { anyOfGroups: filterState.moveGroupFilter, allOfMoves: directMoveIds, refinedGroupMoves },
               learnsetIndex,
               showdownSpecies
             );

@@ -133,7 +133,9 @@ export function getMatchedMovesByConditions(
 
   // ── 群組條件：每個 group 至少命中一個 ────────────────────────
   for (const groupId of anyOfGroups) {
-    const groupMoveIds = MOVE_GROUPS[groupId].moveIds as string[];
+    // 優先使用呼叫端預先展開的 refinedGroupMoves（tag-backed group 必須透過此路徑傳入招式清單）
+    // 若無則退回靜態 moveIds（靜態群組的預設路徑）
+    const groupMoveIds = (conditions.refinedGroupMoves?.[groupId] ?? MOVE_GROUPS[groupId].moveIds) as string[];
     const hits = groupMoveIds.filter((m) => learnable.has(m));
     if (hits.length === 0) return result; // 該 group 無命中 → 整體不滿足
     result.matchedGroupMoves[groupId] = hits;
