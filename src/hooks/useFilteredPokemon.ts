@@ -156,15 +156,25 @@ export function useFilteredPokemon(
     const hasDirectMoves = filterState.moveFilter.length > 0;
     const hasGroupFilter = filterState.moveGroupFilter.length > 0;
 
+    // speciesLearnsetMap 的 key 集合，供 resolveLearnsetId 做 override 解析用
+    // 目的：讓 PokéAPI 特有後綴（如 -mask、-breed）先對應到 pokedex key，再查 speciesLearnsetMap
+    // 只在 learnsetIndex 存在時才有意義
+    const speciesMapKeys: Map<string, Set<string>> = learnsetIndex
+      ? new Map([...speciesLearnsetMap.keys()].map((k) => [k, new Set<string>()]))
+      : new Map();
+
     if (hasDirectMoves || hasGroupFilter) {
       if (learnsetIndex) {
         if (hasGroupFilter) {
           // Group 路徑：透過 getMatchedMovesByConditions 合併處理 group + direct
           const directMoveIds = filterState.moveFilter.map((m) => toShowdownId(m.name));
           result = result.filter((p) => {
-            const speciesId =
-              speciesLearnsetMap.get(toShowdownId(p.name)) ??
-              resolveLearnsetId(p.name, learnsetIndex.bySpecies);
+            // 三段 fallback，與 direct move 路徑保持一致
+            const showdownId = toShowdownId(p.name);
+            const mapped =
+              speciesLearnsetMap.get(showdownId) ??
+              speciesLearnsetMap.get(resolveLearnsetId(p.name, speciesMapKeys));
+            const speciesId = mapped ?? resolveLearnsetId(p.name, learnsetIndex.bySpecies);
             return canSatisfyMoveGroupConditions(
               speciesId,
               { anyOfGroups: filterState.moveGroupFilter, allOfMoves: directMoveIds },
@@ -173,12 +183,16 @@ export function useFilteredPokemon(
             );
           });
         } else {
-          // 純 direct move 路徑（原有邏輯不變）
+          // 純 direct move 路徑
           const moveIds = filterState.moveFilter.map((m) => toShowdownId(m.name));
           result = result.filter((p) => {
-            const speciesId =
-              speciesLearnsetMap.get(toShowdownId(p.name)) ??
-              resolveLearnsetId(p.name, learnsetIndex.bySpecies);
+            const showdownId = toShowdownId(p.name);
+            // 先直接查，若 miss 再透過 speciesMapKeys 做 override 解析後二次查
+            // 目的：讓 PokéAPI 特有後綴（-mask / -breed 等）能正確命中 speciesLearnsetMap
+            const mapped =
+              speciesLearnsetMap.get(showdownId) ??
+              speciesLearnsetMap.get(resolveLearnsetId(p.name, speciesMapKeys));
+            const speciesId = mapped ?? resolveLearnsetId(p.name, learnsetIndex.bySpecies);
             return canLearnAllMovesInChain(learnsetIndex, speciesId, moveIds, showdownSpecies);
           });
         }

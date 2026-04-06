@@ -110,13 +110,6 @@ export function ShowdownProvider({ children }: { children: ReactNode }) {
           speciesLearnsetMap,
         });
 
-        if (import.meta.env.DEV) {
-          console.log(
-            `[ShowdownStore] 載入完成｜招式: ${Object.keys(moves).length}｜` +
-            `種族: ${Object.keys(species).length}｜` +
-            `Learnset 種族數: ${learnsetIndex.bySpecies.size}`
-          );
-        }
       } catch (err) {
         if (cancelled) return;
 

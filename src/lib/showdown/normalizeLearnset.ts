@@ -273,7 +273,8 @@ export function canLearnAllMovesInChain(
   return moveIds.every((moveId) =>
     chain.some((id) => {
       const sp = speciesRecord[id];
-      const lookupId = sp?.learnsetId ?? id;
+      // 若 learnset index 中有此 form 的獨立記錄，優先使用自身 ID（與 canLearnMoveInChain 邏輯一致）
+      const lookupId = index.bySpecies.has(id) ? id : (sp?.learnsetId ?? id);
       return (index.bySpecies.get(lookupId)?.has(moveId) ?? false) ||
              getOverrideMoves(id).includes(moveId);
     })
@@ -305,7 +306,8 @@ export function getDisplayableMatchedMoves(
   for (const moveId of moveIds) {
     for (const id of chain) {
       const sp = speciesRecord[id];
-      const lookupId = sp?.learnsetId ?? id;
+      // 若 learnset index 中有此 form 的獨立記錄，優先使用自身 ID（與 canLearnAllMovesInChain 邏輯一致）
+      const lookupId = index.bySpecies.has(id) ? id : (sp?.learnsetId ?? id);
       if ((index.bySpecies.get(lookupId)?.has(moveId)) || getOverrideMoves(id).includes(moveId)) {
         result.push({ moveId, sourceSpeciesId: id });
         break; // 找到第一個來源即可，不需繼續往上查
