@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer, useCallback, ReactNode, createElement, useEffect, useRef } from "react";
-import { PokemonSummary, FilterState, SortConfig, StatKey, TypeFilterMode, EvolutionCategory, TriState, MoveDetail, MoveTags, MoveGroupId, TacticalMoveFilters } from "../types/pokemon";
+import { PokemonSummary, FilterState, SortConfig, StatKey, TypeFilterMode, EvolutionCategory, TriState, MoveDetail, MoveTags, MoveGroupId, AbilityGroupId, TacticalMoveFilters } from "../types/pokemon";
 import { DEFAULT_STAT_RANGES } from "../constants/stats";
 import { LoadingState, initializeData } from "../services/dataLoader";
 import { MoveLoadingState, initializeMoveData } from "../services/moveLoader";
@@ -29,6 +29,7 @@ type Action =
 const defaultTacticalMoveFilters: TacticalMoveFilters = {
   damageClass: '',
   type: '',
+  target: '',
   powerMin: 0,
   powerMax: 250,
   accuracyMin: 0,
@@ -51,6 +52,7 @@ const defaultFilter: FilterState = {
   moveFilter: [] as MoveDetail[],
   moveTagFilter: [] as (keyof MoveTags)[],
   moveGroupFilter: [] as MoveGroupId[],
+  abilityGroupFilter: [] as AbilityGroupId[],
   tacticalMoveFilters: { ...defaultTacticalMoveFilters },
 };
 
@@ -110,6 +112,7 @@ export interface PokemonContextValue extends PokemonState {
   toggleMoveFilter: (move: MoveDetail) => void;
   toggleMoveTagFilter: (tag: keyof MoveTags) => void;
   toggleMoveGroupFilter: (groupId: MoveGroupId) => void;
+  toggleAbilityGroupFilter: (groupId: AbilityGroupId) => void;
   setTacticalMoveFilter: (partial: Partial<TacticalMoveFilters>) => void;
   resetTacticalMoveFilters: () => void;
 }
@@ -234,8 +237,17 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
     dispatch({ type: "SET_FILTER", payload: { moveGroupFilter: next } });
   }, [state.filterState.moveGroupFilter]);
 
+  const toggleAbilityGroupFilter = useCallback((groupId: AbilityGroupId) => {
+    const current = state.filterState.abilityGroupFilter;
+    const next = current.includes(groupId) ? current.filter((g) => g !== groupId) : [...current, groupId];
+    dispatch({ type: "SET_FILTER", payload: { abilityGroupFilter: next } });
+  }, [state.filterState.abilityGroupFilter]);
+
   const setTacticalMoveFilter = useCallback((partial: Partial<TacticalMoveFilters>) => {
-    dispatch({ type: "SET_FILTER", payload: { tacticalMoveFilters: { ...state.filterState.tacticalMoveFilters, ...partial } } });
+    dispatch({
+      type: "SET_FILTER",
+      payload: { tacticalMoveFilters: { ...state.filterState.tacticalMoveFilters, ...partial } },
+    });
   }, [state.filterState.tacticalMoveFilters]);
 
   const resetTacticalMoveFilters = useCallback(() => {
@@ -256,6 +268,7 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
     toggleMoveFilter,
     toggleMoveTagFilter,
     toggleMoveGroupFilter,
+    toggleAbilityGroupFilter,
     setTacticalMoveFilter,
     resetTacticalMoveFilters,
   };

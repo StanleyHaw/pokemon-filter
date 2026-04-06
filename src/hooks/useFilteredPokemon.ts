@@ -1,12 +1,13 @@
 import { useMemo } from "react";
-import { PokemonSummary, FilterState, SortConfig, StatKey } from "../types/pokemon";
+import { PokemonSummary, FilterState, SortConfig, StatKey, MoveGroupId } from "../types/pokemon";
 import { DEFAULT_STAT_RANGES } from "../constants/stats";
 import { RESTRICTED_LEGENDARY_IDS } from "../constants/restrictedLegendaries";
 import { useShowdownStore } from "../stores/useShowdownStore";
 import { canLearnAllMovesInChain } from "../lib/showdown/normalizeLearnset";
 import { toShowdownId, resolveLearnsetId } from "../lib/showdown/showdownId";
 import { canSatisfyMoveGroupConditions } from "../lib/showdown/queryMoveGroups";
-import { MOVE_GROUPS, type MoveGroupId } from "../constants/moveGroups";
+import { ABILITY_GROUPS, normalizeAbilityId } from "../constants/abilityGroups";
+import { MOVE_GROUPS } from "../constants/moveGroups";
 
 const UNRESTRICTED_ABILITY_NAMES = new Set(["protosynthesis", "quark-drive", "beast-boost"]);
 
@@ -137,6 +138,30 @@ export function useFilteredPokemon(
       );
     }
 
+    // Ability group filter（群組間 AND，群組內 OR）
+    //
+    // 語意：對每個選中的群組，Pokémon 至少要有一個可用特性（特性一/二/隱藏特性）
+    // 屬於該群組，所有選中群組都需命中（群組間 AND）。
+    //
+    // ⚠️ 判斷以「任一可用特性集合」為準，不是「實戰同時啟用的單一特性」。
+    // 例：某隻 Pokémon 有 [intimidate, cloud-nine]，兩者都參與比對。
+    // 若未來需要「只能選一個特性上場」的嚴格模式，需在 FilterState 新增 abilitySlotFilter。
+    //
+    // 與 abilityFilter 的關係：兩者之間是 AND，都需要通過才保留。
+    // 比對時透過 normalizeAbilityId 轉換，不直接假設 slug 格式。
+    if (filterState.abilityGroupFilter.length > 0) {
+      result = result.filter((p) => {
+        const pokemonAbilityIds = new Set(
+          p.abilities.map((a) => normalizeAbilityId(a.name))
+        );
+        return filterState.abilityGroupFilter.every((groupId) =>
+          ABILITY_GROUPS[groupId].abilityIds.some((id) =>
+            pokemonAbilityIds.has(normalizeAbilityId(id))
+          )
+        );
+      });
+    }
+
     // Evolution filter (tri-state per category)
     {
       const evoEntries = Object.entries(filterState.evolutionFilter) as [string, string][];
@@ -184,9 +209,24 @@ export function useFilteredPokemon(
       }
     }
 
-    // Move filter + Move group filter（合併為一次查詢避免重複展開進化鏈）
+    // ── 招式篩選 ────────────────────────────────────────────────────────────
+    //
+    // 兩套責任明確分離：
+    //
+    // A. direct move 路徑（moveFilter）
+    //    寶可夢必須能學會所有指定招式（AND）
+    //    不受 tacticalMoveFilters 影響
+    //
+    // B. tactical group 路徑（moveGroupFilter）
+    //    只在有選擇群組時啟動；先以 tacticalMoveFilters 收斂各群組內的候選招式，
+    //    再判斷寶可夢是否能學到。
+    //    - 靜態群組：從 MOVE_GROUPS[id].moveIds 篩選
+    //    - tag-backed 群組（groupDef.tag 存在）：從 moves[id].tags 動態解析
+    //    直接選招（moveFilter）在此路徑下作為 allOfMoves 一起處理
+
     const hasDirectMoves = filterState.moveFilter.length > 0;
     const hasGroupFilter = filterState.moveGroupFilter.length > 0;
+    const hasMoveTagFilter = filterState.moveTagFilter.length > 0;
 
     // speciesLearnsetMap 的 key 集合，供 resolveLearnsetId 做 override 解析用
     // 目的：讓 PokéAPI 特有後綴（如 -mask、-breed）先對應到 pokedex key，再查 speciesLearnsetMap
@@ -195,15 +235,11 @@ export function useFilteredPokemon(
       ? new Map([...speciesLearnsetMap.keys()].map((k) => [k, new Set<string>()]))
       : new Map();
 
-    if (hasDirectMoves || hasGroupFilter) {
+    if (hasDirectMoves || hasGroupFilter || hasMoveTagFilter) {
       if (learnsetIndex) {
         if (hasGroupFilter) {
-          // Group 路徑：透過 getMatchedMovesByConditions 合併處理 group + direct
           const directMoveIds = filterState.moveFilter.map((m) => toShowdownId(m.name));
 
-          // 為 tag-backed group 預先展開招式清單
-          // tag-backed group（接觸技 / 聲音技 / 拳招 / 咬招 / 斬擊技）的 moveIds = []
-          // 必須在此動態從 moves 資料取出符合 tag 的招式，再傳給 canSatisfyMoveGroupConditions
           const refinedGroupMoves: Partial<Record<MoveGroupId, string[]>> = {};
           if (moves) {
             for (const groupId of filterState.moveGroupFilter) {
@@ -236,41 +272,34 @@ export function useFilteredPokemon(
           });
         } else {
           // 純 direct move 路徑
-          const moveIds = filterState.moveFilter.map((m) => toShowdownId(m.name));
+          if (hasDirectMoves) {
+            const moveIds = filterState.moveFilter.map((m) => toShowdownId(m.name));
+            result = result.filter((p) => {
+              const showdownId = toShowdownId(p.name);
+              // 先直接查，若 miss 再透過 speciesMapKeys 做 override 解析後二次查
+              // 目的：讓 PokéAPI 特有後綴（-mask / -breed 等）能正確命中 speciesLearnsetMap
+              const mapped =
+                speciesLearnsetMap.get(showdownId) ??
+                speciesLearnsetMap.get(resolveLearnsetId(p.name, speciesMapKeys));
+              const speciesId = mapped ?? resolveLearnsetId(p.name, learnsetIndex.bySpecies);
+              return canLearnAllMovesInChain(learnsetIndex, speciesId, moveIds, showdownSpecies);
+            });
+          }
+        }
+
+        // ── moveTagFilter：獨立並行篩選（不作為群組子條件） ────────────
+        //
+        // 無論是否同時有 moveGroupFilter，tag 條件永遠作為獨立 pass 運行。
+        // 語意：寶可夢 learnset 中至少有一個招式同時符合所有選中 tags。
+        // 與 group 條件之間是 AND（各自獨立通過後才保留）。
+        if (hasMoveTagFilter && moves) {
+          const tags = filterState.moveTagFilter;
           result = result.filter((p) => {
-            const showdownId = toShowdownId(p.name);
-            // 先直接查，若 miss 再透過 speciesMapKeys 做 override 解析後二次查
-            // 目的：讓 PokéAPI 特有後綴（-mask / -breed 等）能正確命中 speciesLearnsetMap
-            const mapped =
-              speciesLearnsetMap.get(showdownId) ??
-              speciesLearnsetMap.get(resolveLearnsetId(p.name, speciesMapKeys));
-            const speciesId = mapped ?? resolveLearnsetId(p.name, learnsetIndex.bySpecies);
-            return canLearnAllMovesInChain(learnsetIndex, speciesId, moveIds, showdownSpecies);
-          });
-        }
-      } else {
-        // PokéAPI 降級路徑（僅處理 direct moves，group 需要 Showdown 資料）
-        if (hasDirectMoves) {
-          result = result.filter((p) =>
-            filterState.moveFilter.every((move) =>
-              move.learnedByPokemon.some((lp) => lp.id === p.id || lp.name === p.name)
-            )
-          );
-        }
-      }
-    }
+            const speciesId =
+              speciesLearnsetMap.get(toShowdownId(p.name)) ??
+              resolveLearnsetId(p.name, learnsetIndex.bySpecies);
 
-    // Move tag filter: Pokémon's learnset must contain at least one move matching ALL selected tags
-    if (filterState.moveTagFilter.length > 0 && moves) {
-      const tags = filterState.moveTagFilter;
-      result = result.filter((p) => {
-        const speciesId =
-          speciesLearnsetMap.get(toShowdownId(p.name)) ??
-          (learnsetIndex ? resolveLearnsetId(p.name, learnsetIndex.bySpecies) : toShowdownId(p.name));
-
-        // Collect all move IDs this Pokémon can learn (self + prevo chain)
-        const chain = learnsetIndex
-          ? [speciesId, ...(() => {
+            const chain = [speciesId, ...(() => {
               const preChain: string[] = [];
               let cur = speciesId;
               const visited = new Set<string>();
@@ -284,22 +313,36 @@ export function useFilteredPokemon(
                 cur = prevoId;
               }
               return preChain;
-            })()]
-          : [speciesId];
+            })()];
 
-        const learnableMoveIds = new Set<string>();
-        for (const id of chain) {
-          const sp = showdownSpecies[id];
-          const lookupId = sp?.learnsetId ?? id;
-          learnsetIndex?.bySpecies.get(lookupId)?.forEach((m) => learnableMoveIds.add(m));
+            const learnableMoveIds = new Set<string>();
+            for (const id of chain) {
+              const sp = showdownSpecies[id];
+              const lookupId = sp?.learnsetId ?? id;
+              learnsetIndex.bySpecies.get(lookupId)?.forEach((m) => learnableMoveIds.add(m));
+            }
+
+            // 每個 tag 各自獨立：Pokémon learnset 中「至少一個招式符合該 tag」→ tag 通過
+            // 與群組入口語意一致（OR-within, AND-between）
+            return tags.every((tag) =>
+              [...learnableMoveIds].some((moveId) => {
+                const move = moves[moveId];
+                return move && move.tags[tag];
+              })
+            );
+          });
         }
-
-        // Check if any learnable move satisfies all selected tags
-        return [...learnableMoveIds].some((moveId) => {
-          const move = moves[moveId];
-          return move && tags.every((tag) => move.tags[tag]);
-        });
-      });
+      } else {
+        // ── PokéAPI 降級路徑 ──────────────────────────────────────────────
+        // 只處理 direct moves；group / tactical 需要 Showdown 資料
+        if (hasDirectMoves) {
+          result = result.filter((p) =>
+            filterState.moveFilter.every((move) =>
+              move.learnedByPokemon.some((lp) => lp.id === p.id || lp.name === p.name)
+            )
+          );
+        }
+      }
     }
 
     // Standalone tactical move filter（無 group / direct move 時獨立生效）
@@ -375,5 +418,5 @@ export function useFilteredPokemon(
     });
 
     return result;
-  }, [allPokemon, filterState, sortConfig, learnsetIndex, speciesLearnsetMap, showdownSpecies, moves]); // filterState includes moveGroupFilter
+  }, [allPokemon, filterState, sortConfig, learnsetIndex, speciesLearnsetMap, showdownSpecies, moves]); // filterState includes moveGroupFilter, abilityGroupFilter
 }

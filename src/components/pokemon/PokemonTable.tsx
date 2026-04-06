@@ -222,7 +222,7 @@ export function PokemonTable() {
               </tr>
             ) : (
               filtered.map((p) => (
-                <PokemonRow key={p.id} pokemon={p} onClick={setSelectedPokemon} moveFilter={filterState.moveFilter} moveGroupFilter={filterState.moveGroupFilter} />
+                <PokemonRow key={p.id} pokemon={p} onClick={setSelectedPokemon} moveFilter={filterState.moveFilter} moveGroupFilter={filterState.moveGroupFilter} tacticalMoveFilters={filterState.tacticalMoveFilters} />
               ))
             )}
           </tbody>

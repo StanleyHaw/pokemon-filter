@@ -80,8 +80,13 @@ export interface MoveGroupConditions {
   allOfMoves?: string[];
 
   /**
-   * 各群組預先過濾後的候選招式列表（由呼叫端傳入，避免重複計算）
-   * 若有提供，優先使用此列表而非從 MOVE_GROUPS 重新解析
+   * 各群組的候選招式 pre-filtered 結果
+   *
+   * 若有提供，對應 groupId 改用此 list 而非 MOVE_GROUPS[id].moveIds。
+   * 未提供某 groupId 時退回 MOVE_GROUPS[id].moveIds（向下相容）。
+   *
+   * 使用場景：useFilteredPokemon 將 tacticalMoveFilters + moveTagFilter
+   * 預先收斂各群組招式後，透過此欄位傳入，避免在查詢函式內重複存取 moves 資料。
    */
   refinedGroupMoves?: Partial<Record<MoveGroupId, string[]>>;
 }
@@ -123,7 +128,7 @@ export function getMatchedMovesByConditions(
     matchedDirectMoves: [],
   };
 
-  const { anyOfGroups = [], allOfMoves = [] } = conditions;
+  const { anyOfGroups = [], allOfMoves = [], refinedGroupMoves } = conditions;
   if (anyOfGroups.length === 0 && allOfMoves.length === 0) {
     result.matched = true;
     return result;
@@ -133,9 +138,8 @@ export function getMatchedMovesByConditions(
 
   // ── 群組條件：每個 group 至少命中一個 ────────────────────────
   for (const groupId of anyOfGroups) {
-    // 優先使用呼叫端預先展開的 refinedGroupMoves（tag-backed group 必須透過此路徑傳入招式清單）
-    // 若無則退回靜態 moveIds（靜態群組的預設路徑）
-    const groupMoveIds = (conditions.refinedGroupMoves?.[groupId] ?? MOVE_GROUPS[groupId].moveIds) as string[];
+    // 使用 pre-filtered 候選列表（若有），否則退回原始定義
+    const groupMoveIds = (refinedGroupMoves?.[groupId] ?? MOVE_GROUPS[groupId].moveIds) as string[];
     const hits = groupMoveIds.filter((m) => learnable.has(m));
     if (hits.length === 0) return result; // 該 group 無命中 → 整體不滿足
     result.matchedGroupMoves[groupId] = hits;
